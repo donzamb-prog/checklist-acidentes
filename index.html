@@ -1,0 +1,2351 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CHECKLIST DE ACIDENTES — Limpo</title>
+
+<!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7B68EE">
+
+
+  <!-- meus estilos CSS -->
+<style>
+
+  :root{
+    --bg: #E6E6FA;
+    --card: #F8F8FF;
+    --accent: #7B68EE;
+    --text: #0b1330;
+    --muted: #6b6b6b;
+    --radius: 10px;
+    --gap: 14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #F7F6FF 0%, var(--bg) 100%);
+    color:var(--text);
+    padding:18px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container{ max-width:1100px; margin:0 auto; padding:20px; }
+  .header{ text-align:center; margin-bottom:18px; }
+  .title{ font-size:20px; color:var(--accent); font-weight:800; letter-spacing:0.6px; }
+  .form-grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items:start; }
+  .card { grid-column: 1 / -1; background: var(--card); padding:18px; border-radius: var(--radius); border: 1px solid rgba(123,104,238,0.08); box-shadow: 0 6px 18px rgba(20,20,50,0.04); }
+  .col-6 { grid-column: span 6; } .col-4 { grid-column: span 4; } .col-3 { grid-column: span 3; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
+  .card h2{ margin:0 0 8px; color:var(--accent); font-size:16px; }
+  label{ display:block; font-size:13px; margin-bottom:6px; color:var(--text); font-weight:600; }
+  input[type=text], input[type=number], input[type=date], input[type=time], select, textarea{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid #E9E7FF; background:#fff; font-size:14px; color:var(--text); }
+  textarea{ min-height:80px; resize:vertical; }
+  .inline-row{ display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+  .inline-row .small { width:160px; }
+  .checkbox-group{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+  .checkbox-group label{ font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E9E7FF; border-radius:8px; padding:7px 10px; transition: box-shadow .15s ease, transform .05s ease, border-color .15s ease; }
+  .checkbox-group label:hover { box-shadow: 0 4px 10px rgba(20,20,50,0.06); }
+  .checkbox-group input[type="checkbox"]{ accent-color: var(--accent); }
+  .checkbox-group label:has(input[type="checkbox"]:checked){ border-color: rgba(123,104,238,0.55); box-shadow: 0 6px 14px rgba(123,104,238,0.10); }
+  .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .btn { background:var(--accent); color:#fff; padding:10px 16px; border-radius:12px; border:none; font-weight:800; letter-spacing:.3px; box-shadow: 0 6px 14px rgba(123,104,238,0.16); transition: transform .05s ease, box-shadow .15s ease, filter .1s ease; }
+  .btn:hover { filter: brightness(1.03); box-shadow:0 8px 18px rgba(123,104,238,0.22); }
+  .btn:active { transform: translateY(1px); }
+  .btn-ghost { background:transparent; border:1px solid var(--accent); color:var(--accent); }
+  .muted{ color:var(--muted); font-size:13px; }
+  .photosPreview{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .thumbWrap{ display:flex; flex-direction:column; align-items:center; width:120px; border:1px solid #e5e5ff; padding:6px; border-radius:6px; background:#fff; }
+  .thumbWrap .photo{ max-width:100%; max-height:90px; object-fit:contain; display:block; margin-bottom:6px; border-radius:6px; }
+  .removePhotoBtn{ background:#F44336; color:white; border:none; padding:4px 6px; border-radius:4px; cursor:pointer; font-size:12px; }
+  footer{ margin-top:12px; text-align:center; color:#444; font-size:13px; }
+  .hidden{ display:none !important; }
+  #toastMessage { position: fixed; top: 20px; right: 20px; background: #7B68EE; color: #fff; padding: 12px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity .4s ease, transform .4s ease; transform: translateY(-15px); z-index: 9999; font-weight: bold; font-size: 15px; }
+  #toastMessage.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  *:focus{ outline: 3px solid #7B68EE !important; outline-offset: 3px; box-shadow: 0 0 0 4px rgba(123,104,238,0.35); border-radius: 6px; }
+  .fieldset-contrast { border: 1px solid rgba(123,104,238,0.25); border-radius: 10px; padding: 12px 12px 10px; background: linear-gradient(180deg, #ffffff 0%, #F8F8FF 100%); }
+  .fieldset-contrast > legend { padding: 0 8px; font-weight: 800; color: var(--accent); font-size: 14px; letter-spacing: .2px; }
+  .tracado-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tracado-option { display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E9E7FF; border-radius:8px; padding:8px 10px; cursor:pointer; user-select:none; transition: box-shadow .15s ease, transform .05s ease; }
+  .tracado-option:hover { box-shadow: 0 4px 10px rgba(20,20,50,0.06); }
+  .tracado-option:active { transform: translateY(1px); }
+  .tracado-option > input[type="checkbox"] { accent-color: var(--accent); margin-right:2px; }
+  .road-icon { width:22px; height:22px; flex:0 0 22px; border-radius:4px; background:#FFD54F; position:relative; overflow:hidden; }
+  .road-icon::after{ content:""; position:absolute; inset:3px; background:#222; -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; }
+  .collapsible{ max-height:0; opacity:0; overflow:hidden; transition:max-height .28s ease, opacity .2s ease; }
+  .collapsible.show{ max-height:90px; opacity:1; }
+  @media (max-width:900px){ .form-grid{ grid-template-columns: repeat(6, 1fr); } .col-6{ grid-column: span 6; } .col-4{ grid-column: span 6; } .col-3{ grid-column: span 3; } .col-8{ grid-column: span 6; } }
+  @media (max-width:520px){ .form-grid{ grid-template-columns: 1fr; gap:12px; } .col-3, .col-4, .col-6, .col-8, .col-12{ grid-column: 1 / -1; } .inline-row{ flex-direction:column; align-items:stretch; } #tracado { display:grid; grid-template-columns:1fr !important; gap:8px !important; } .card { padding:14px; } .card h2 { font-size:15px; margin-bottom:6px; } label { font-size:12.5px; margin-bottom:4px; } input, select, textarea { padding:9px 10px; font-size:13.5px; } .btn { width:100%; padding:12px; border-radius:12px; font-size:15px; } .actions { position: sticky; bottom: 8px; background: transparent; z-index: 20; } }
+
+</style>
+</head>
+<body>
+
+<style>
+  :root{
+    --bg: #E6E6FA;
+    --card: #F8F8FF;
+    --accent: #7B68EE;
+    --text: #0b1330;
+    --muted: #6b6b6b;
+    --radius: 10px;
+    --gap: 14px;
+  }
+
+  /* Reset mínimo */
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #F7F6FF 0%, var(--bg) 100%);
+    color:var(--text);
+    padding:18px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:20px;
+  }
+
+  /* Header */
+  .header{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .title{
+    font-size:20px;
+    color:var(--accent);
+    font-weight:800;
+    letter-spacing:0.6px;
+  }
+
+  /* Grid layout */
+  .form-grid{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gap);
+    align-items:start;
+  }
+
+  /* Card (section) */
+  .card {
+    grid-column: 1 / -1;
+    background: var(--card);
+    padding:18px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(123,104,238,0.08);
+    box-shadow: 0 6px 18px rgba(20,20,50,0.04);
+  }
+
+  /* small card variants for multi-column */
+  .col-6 { grid-column: span 6; }
+  .col-4 { grid-column: span 4; }
+  .col-3 { grid-column: span 3; }
+  .col-8 { grid-column: span 8; }
+
+  /* Section titles */
+  .card h2{
+    margin:0 0 8px 0;
+    color:var(--accent);
+    font-size:16px;
+  }
+
+  /* Inputs */
+  label{
+    display:block;
+    font-size:13px;
+    margin-bottom:6px;
+    color:var(--text);
+    font-weight:600;
+  }
+
+  input[type=text],
+  input[type=number],
+  input[type=date],
+  input[type=time],
+  select,
+  textarea {
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #E9E7FF;
+    background:#fff;
+    font-size:14px;
+    color:var(--text);
+  }
+
+  textarea{ min-height:80px; resize:vertical; }
+
+  /* Inline small */
+  .inline-row{ display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+  .inline-row .small { width:160px; }
+
+  /* checkboxes group */
+  .checkbox-group{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+  .checkbox-group label{ font-weight:500; cursor:pointer; }
+
+  /* buttons */
+  .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .btn {
+    background:var(--accent);
+    color:#fff;
+    padding:8px 14px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+    box-shadow: 0 6px 14px rgba(123,104,238,0.12);
+  }
+  .btn-ghost {
+    background:transparent;
+    border:1px solid var(--accent);
+    color:var(--accent);
+  }
+
+  .muted{ color:var(--muted); font-size:13px; }
+
+  .photosPreview{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .thumbWrap{ display:flex; flex-direction:column; align-items:center; width:120px; border:1px solid #ddd; padding:6px; border-radius:6px; background:#fff; }
+  .thumbWrap .photo{ max-width:100%; max-height:90px; object-fit:contain; display:block; margin-bottom:6px; }
+  .removePhotoBtn{ background:#e74c3c; color:white; border:none; padding:4px 6px; border-radius:4px; cursor:pointer; font-size:12px; }
+
+  footer{ margin-top:12px; text-align:center; color:#444; font-size:13px; }
+
+  /* Hidden helper */
+  .hidden{ display:none !important; }
+
+  /* Toast / mensagem flutuante */
+  #toastMessage {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #7B68EE;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .4s ease, transform .4s ease;
+    transform: translateY(-15px);
+    z-index: 9999;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  #toastMessage.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* ===== Print refinado ===== */
+  @media print {
+    /* limpa fundos e sombras pra economizar tinta */
+    body{ background:#fff !important; padding:0 !important; }
+    .card{
+      background:#fff !important;
+      box-shadow:none !important;
+      border:1px solid #bbb !important;
+    }
+
+    /* esconde controles de interação */
+    .actions,
+    .addPhotosBtn,
+    input[type="file"],
+    #toastMessage { display:none !important; }
+
+    /* evita quebras no meio dos cards */
+    .card, .section { page-break-inside: avoid; }
+
+    /* imagens não se separam */
+    img { page-break-inside: avoid; }
+
+    /* grid colapsa em 1 coluna pra caber melhor */
+    .form-grid{ display:block !important; }
+
+    /* links e inputs impressos legíveis */
+    label{ color:#000 !important; }
+    input, select, textarea{
+      border:1px solid #444 !important;
+      background:#fff !important;
+      color:#000 !important;
+    }
+  }
+
+  /* Responsive base que você já usava */
+  @media (max-width:900px){
+    .form-grid{ grid-template-columns: repeat(6, 1fr); }
+    .col-6{ grid-column: span 6; }
+    .col-4{ grid-column: span 6; }
+    .col-3{ grid-column: span 3; }
+    .col-8{ grid-column: span 6; }
+  }
+  @media (max-width:520px){
+    .form-grid{ grid-template-columns: repeat(1,1fr); }
+    .col-3, .col-4, .col-6, .col-8{ grid-column: span 1; }
+    .inline-row{ flex-direction:column; align-items:stretch; }
+  }
+
+  /* ===== Versão compacta para celular (reforço) ===== */
+  @media (max-width: 520px){
+    /* layout 1 coluna + espaços */
+    .form-grid{
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+    }
+    .col-3, .col-4, .col-6, .col-8, .col-12{
+      grid-column: 1 / -1 !important;
+    }
+
+    /* cards e títulos menores, mas legíveis */
+    .card{ padding: 14px !important; }
+    .card h2{ font-size: 15px; margin-bottom: 6px; }
+
+    /* inputs e labels otimizados para dedo */
+    label{ font-size: 12.5px; margin-bottom: 4px; }
+    input[type=text],
+    input[type=number],
+    input[type=date],
+    input[type=time],
+    select,
+    textarea{
+      padding: 11px 12px !important;
+      font-size: 15px !important;
+      border-radius: 10px !important;
+    }
+
+    /* grupos de checkbox em “chips” confortáveis */
+    .checkbox-group{ gap: 8px !important; }
+    .checkbox-group label{
+      padding: 10px 12px !important;
+      border-radius: 10px !important;
+      font-size: 14px !important;
+    }
+
+    /* TRAÇADO em 1 coluna quando estreito */
+    #tracado{
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+    }
+
+    /* botões grandes e 100% largura */
+    .btn{
+      width: 100% !important;
+      padding: 12px 16px !important;
+      border-radius: 12px !important;
+      font-size: 16px !important;
+    }
+    .actions{
+      position: sticky;
+      bottom: 8px;
+      background: transparent;
+      z-index: 20;
+      gap: 8px;
+    }
+
+    /* fotos: evitar overflow horizontal */
+    .photosPreview{ gap: 10px !important; }
+    .thumbWrap{ width: calc(50% - 10px) !important; }
+    .thumbWrap .photo{ max-height: 120px !important; }
+
+    /* títulos principais */
+    .title{ font-size: 18px !important; }
+  }
+
+  /* ===== Pequenos tablets (deixa em 2 colunas) ===== */
+  @media (min-width: 521px) and (max-width: 900px){
+    .form-grid{
+      grid-template-columns: repeat(6, 1fr) !important;
+    }
+    .col-6{ grid-column: span 6 !important; }
+    .col-4{ grid-column: span 6 !important; }
+    .col-3{ grid-column: span 3 !important; }
+    .col-8{ grid-column: span 6 !important; }
+  }
+
+  /* ============================================================
+     ====== MODO RODOVIA / ALTO CONTRASTE / NOTURNO (NOVO) ======
+     ============================================================ */
+
+  /* Chips simples para os toggles (HTML opcional abaixo) */
+  .toggle-chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 10px; border:1px solid #E9E7FF; border-radius:999px;
+    background:#fff; cursor:pointer; user-select:none;
+  }
+  .toggle-chip input{ accent-color: var(--accent); }
+
+  /* Base do Modo Rodovia (alvos maiores) */
+  body.mode-rodovia{
+    --scale: 1.12;
+    --touch: 44px;    /* alvo mínimo recomendado (WCAG) */
+    padding-bottom: 86px; /* espaço pro dock fixo */
+  }
+  body.mode-rodovia .card{ padding: 16px; }
+  body.mode-rodovia label{ font-size: calc(13px * var(--scale)); }
+  body.mode-rodovia input[type=text],
+  body.mode-rodovia input[type=number],
+  body.mode-rodovia input[type=date],
+  body.mode-rodovia input[type=time],
+  body.mode-rodovia select,
+  body.mode-rodovia textarea{
+    padding: 14px 14px;
+    font-size: calc(15px * var(--scale));
+    border-radius: 12px;
+    min-height: var(--touch);
+  }
+  body.mode-rodovia .checkbox-group label{
+    padding: 12px 14px;
+    font-size: calc(14px * var(--scale));
+    min-height: var(--touch);
+  }
+  body.mode-rodovia .btn{
+    padding: 14px 18px;
+    font-size: calc(16px * var(--scale));
+    border-radius: 14px;
+    min-height: var(--touch);
+  }
+
+  /* Dock fixo para botões de ação */
+  body.mode-rodovia .actions{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 50;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, rgba(247,246,255,0) 0%, rgba(247,246,255,0.85) 20%, rgba(247,246,255,0.95) 100%);
+    backdrop-filter: saturate(120%) blur(6px);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 10px;
+  }
+  body.mode-rodovia .actions .btn{ flex: 1 0 180px; }
+
+  /* Alto contraste */
+  body.mode-contraste{
+    --bg: #ffffff;
+    --card: #ffffff;
+    --accent: #000000;
+    --text: #000000;
+    --muted: #222;
+  }
+  body.mode-contraste .card{ border-color:#000 !important; }
+  body.mode-contraste .checkbox-group label{ border-color:#000; }
+  body.mode-contraste .btn{ background:#000; color:#fff; }
+
+  /* Noturno */
+  body.mode-noturno{
+    --bg: #0e0f14;
+    --card: #151724;
+    --accent: #8c95ff;
+    --text: #f2f3ff;
+    --muted: #b8b9c9;
+    background: linear-gradient(180deg, #0f1020 0%, #0e0f14 100%) !important;
+  }
+  body.mode-noturno .card{
+    background: var(--card);
+    border: 1px solid rgba(140,149,255,0.18);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  }
+  body.mode-noturno .checkbox-group label{
+    background:#1a1d2c; border-color: rgba(140,149,255,0.28);
+  }
+  body.mode-noturno .btn{ background: var(--accent); color:#0e0f14; }
+
+  /* Reforços mobile quando os modos estiverem ativos */
+  @media (max-width:520px){
+    body.mode-rodovia .form-grid{ grid-template-columns: 1fr !important; gap:12px !important; }
+    body.mode-rodovia .btn{ width:100%; }
+    body.mode-rodovia #tracado{ display:grid !important; grid-template-columns:1fr !important; gap:8px !important; }
+  }
+</style>
+
+
+</head>
+<body>
+  <div id="toastMessage" role="status" aria-live="polite"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="title">CHECKLIST DE ACIDENTES</div>
+    </header>
+
+<!-- CONTROLES MODO RODOVIA -->
+<div class="card" style="margin-bottom:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+  <strong>Modo Rodovia:</strong>
+
+  <label class="toggle-chip">
+    <input type="checkbox" id="modeRodoviaToggle">
+    <span>Ultra-compacto</span>
+  </label>
+
+  <label class="toggle-chip">
+    <input type="checkbox" id="modeContrasteToggle">
+    <span>Alto contraste</span>
+  </label>
+
+  <label class="toggle-chip">
+    <input type="checkbox" id="modeNoturnoToggle">
+    <span>Noturno</span>
+  </label>
+</div>
+
+    <!-- FORM -->
+    <form id="form" class="card" onsubmit="return false">
+      <div class="form-grid">
+
+        <!-- Informações Gerais -->
+        <section class="card col-6">
+          <h2>Informações Gerais</h2>
+
+          <label>EV N° <span class="muted">*</span></label>
+          <input id="ev" name="ev" type="text" required>
+
+          <div style="height:8px"></div>
+
+          <div class="inline-row">
+            <div style="flex:1">
+              <label>DATA <span class="muted">*</span></label>
+              <input id="data" name="data" type="date" required>
+            </div>
+
+            <div style="width:160px">
+              <label>HORA <span class="muted">*</span></label>
+              <input id="time" name="time" type="time" required>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tipo de Acidente / Responsável / Prefixo viatura -->
+        <section class="card col-6">
+          <h2 style="margin:0 0 6px">DETALHES</h2>
+
+          <div style="width:100%; margin-bottom:8px;">
+            <label>TIPO DE ACIDENTE <span class="muted">*</span></label>
+            <select id="tipo" name="tipo" required>
+              <option value="">Selecione</option>
+              <option>AC 01</option>
+              <option>AC 02</option>
+              <option>AC 03</option>
+              <option>AC 04</option>
+              <option>AC 05</option>
+            </select>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:8px;">
+            <div style="flex:1">
+              <label>RESPONSÁVEL <span class="muted">*</span></label>
+              <input id="responsavel" name="responsavel" type="text" required>
+            </div>
+
+            <div style="width:160px">
+              <label>PREFIXO VIATURA <span class="muted">*</span></label>
+              <input id="prefixoViatura" name="prefixoViatura" type="text" required>
+            </div>
+          </div>
+        </section>
+
+<fieldset class="card-group">
+
+<!-- ===================== LOCALIZAÇÃO ===================== -->
+<section class="card col-12">
+  <fieldset class="fieldset-contrast" aria-labelledby="legend-localizacao">
+    <legend id="legend-localizacao">LOCALIZAÇÃO</legend>
+
+    <!-- Rodovia + KM -->
+    <div class="inline-row" style="margin-bottom:10px;">
+      <div style="flex:1; min-width:220px;">
+        <label for="rodovia">RODOVIA <span class="muted">*</span> (máx 10 caracteres)</label>
+        <input id="rodovia" name="rodovia" type="text" maxlength="10" required>
+      </div>
+
+      <div style="width:140px; min-width:120px;">
+        <label for="km">KM <span class="muted">*</span></label>
+        <input id="km" name="km" type="text" maxlength="10" required>
+      </div>
+    </div>
+
+    <!-- Sentido -->
+    <fieldset class="fieldset-contrast" style="padding:10px; margin-bottom:12px;">
+      <legend style="font-weight:700; color:var(--accent);">SENTIDO <span class="muted">*</span></legend>
+
+      <div id="sentido" class="checkbox-group" role="group" aria-label="Sentido da via">
+        <label title="Fluxo em direção ao Norte">🧭 <input type="checkbox" name="sentido" value="NORTE"> NORTE</label>
+        <label title="Fluxo em direção ao Sul">🧭 <input type="checkbox" name="sentido" value="SUL"> SUL</label>
+        <label title="Fluxo em direção ao Leste">🧭 <input type="checkbox" name="sentido" value="LESTE"> LESTE</label>
+        <label title="Fluxo em direção ao Oeste">🧭 <input type="checkbox" name="sentido" value="OESTE"> OESTE</label>
+      </div>
+    </fieldset>
+
+    <!-- Pista -->
+    <fieldset class="fieldset-contrast" style="padding:10px;">
+      <legend style="font-weight:700; color:var(--accent);">PISTA <span class="muted">*</span></legend>
+
+      <div id="pista" class="checkbox-group" role="group" aria-label="Pista">
+        <label title="Pista Principal">🛣️ <input type="checkbox" name="pista" value="PRINCIPAL"> PRINCIPAL</label>
+        <label title="Pista Marginal">🛣️ <input type="checkbox" name="pista" value="MARGINAL"> MARGINAL</label>
+      </div>
+    </fieldset>
+
+  </fieldset>
+</section>
+
+
+
+<!-- ===================== TRAÇADO ===================== -->
+<section class="card col-12">
+  <fieldset class="fieldset-contrast" aria-labelledby="legend-tracado">
+    <legend id="legend-tracado">TRAÇADO DA VIA</legend>
+
+    <div id="tracado" class="checkbox-group" style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;">
+
+      <!-- Ícones estilo sinalização rodoviária -->
+      <label title="Trecho reto da via">⬜ <input type="checkbox" value="RETA"> RETA</label>
+
+      <label title="Curva suave à direita/esquerda">↪️ <input type="checkbox" value="CURVA SUAVE"> CURVA SUAVE</label>
+
+      <label title="Curva acentuada perigosa">⤴️ <input type="checkbox" value="CURVA ACENTUADA"> CURVA ACENTUADA</label>
+
+      <label title="Trecho em aclive (subida)">⬆️ <input type="checkbox" value="ACLIVE"> ACLIVE</label>
+
+      <label title="Trecho em declive (descida)">⬇️ <input type="checkbox" value="DECLIVE"> DECLIVE</label>
+
+      <label title="Trecho plano / nível">➡️ <input type="checkbox" value="NÍVEL"> NÍVEL</label>
+
+      <label title="Barreira física central da pista">⛔ <input type="checkbox" value="BARREIRA CENTRAL"> BARREIRA CENTRAL</label>
+
+      <label title="Barreira lateral da via">⛔ <input type="checkbox" value="BARREIRA LATERAL"> BARREIRA LATERAL</label>
+
+      <label title="Defensa metálica central">🛡️ <input type="checkbox" value="DEFENSA CENTRAL"> DEFENSA CENTRAL</label>
+
+      <label title="Defensa metálica lateral">🛡️ <input type="checkbox" value="DEFENSA LATERAL"> DEFENSA LATERAL</label>
+
+      <label title="Gramado lateral da via">🌿 <input type="checkbox" value="GRAMADO LATERAL"> GRAMADO LATERAL</label>
+
+      <label title="Gramado no canteiro central">🌿 <input type="checkbox" value="GRAMADO CENTRAL"> GRAMADO CENTRAL</label>
+
+      <label title="Meio-fio lateral">▭ <input type="checkbox" value="MEIO FIO"> MEIO FIO</label>
+
+      <label title="Talude (barranco lateral da via)">⛰️ <input type="checkbox" value="TALUDE"> TALUDE</label>
+
+      <!-- OUTROS -->
+      <label title="Descrever outro tipo de traçado">✏️ <input type="checkbox" value="OUTROS" id="tracado_outros_cb"> OUTROS</label>
+
+    </div>
+
+    <input
+      type="text"
+      id="tracado_outros_txt"
+      name="tracado_outros"
+      class="hidden"
+      placeholder="Descreva (máx 60 caracteres)"
+      maxlength="60"
+      style="margin-top:8px; width:100%;"
+    >
+  </fieldset>
+</section>
+
+      <input
+        type="text"
+        id="tracado_outros_txt"
+        name="tracado_outros"
+        class="hidden"
+        placeholder="Descreva (máx 60)"
+        maxlength="60"
+        aria-hidden="true"
+        style="grid-column: 1 / -1; margin-top: -2px;">
+
+    </div>
+  </fieldset>
+</section>
+</fieldset>
+
+</fieldset>
+
+</section>
+        <!-- CONDIÇÕES ADVERSAS (esta seção fecha a Parte 1/3) -->
+        <section class="card col-8">
+          <h2 style="margin:0 0 6px">CONDIÇÕES ADVERSAS</h2>
+          <div class="checkbox-group" id="condgroup">
+            <label><input type="checkbox" value="CHUVA FINA"> CHUVA FINA</label>
+            <label><input type="checkbox" value="GAROA"> GAROA</label>
+            <label><input type="checkbox" value="TEMPO BOM"> TEMPO BOM</label>
+            <label><input type="checkbox" value="PISTA SECA"> PISTA SECA</label>
+            <label><input type="checkbox" value="PISTA MOLHADA"> PISTA MOLHADA</label>
+          </div>
+
+          <div style="height:8px"></div>
+          <label>OUTRAS (máx 60 caracteres)</label>
+          <input id="condicoes_outras" name="condicoes_outras" maxlength="60" type="text">
+        </section>
+
+      </div> <!-- .form-grid -->
+
+<section class="card">
+  <h2>VEÍCULOS</h2>
+
+  <div class="form-group">
+    <label for="numVeiculos">QUANTOS VEÍCULOS ESTÃO ENVOLVIDOS? <span class="muted">*</span></label>
+    <input id="numVeiculos" type="number" min="1" value="1" style="width:140px">
+  </div>
+
+  <div id="veiculosArea"></div>
+</section>
+
+
+<section class="card">
+  <h2>DINÂMICA</h2>
+
+  <div class="form-group">
+    <label for="dinamica">DESCREVA COMO ACONTECEU O ACIDENTE</label>
+    <textarea id="dinamica" placeholder="Ex.: Veículo 1 seguia na faixa 2, quando..." rows="4"></textarea>
+  </div>
+</section>
+
+
+<section class="card">
+  <h2>PREFIXO PMR NO LOCAL</h2>
+
+  <div class="form-group">
+    <input id="prefixoPMR" name="prefixoPMR" type="text" placeholder="Ex.: A-12345">
+  </div>
+</section>
+
+
+<section class="card">
+  <h2>OBSERVAÇÕES</h2>
+
+  <div class="form-group">
+    <textarea id="observacoes" placeholder="Informações extras relevantes" rows="3"></textarea>
+  </div>
+</section>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+  <button type="button" class="btn" id="btnPdf">Gerar PDF</button>
+  <button type="button" class="btn btn-ghost" id="btnShare">Compartilhar</button>
+
+  <input id="photos" type="file" accept="image/*" multiple class="hidden">
+  <button type="button" class="btn btn-ghost" id="btnAddPhotos">Selecionar Fotos</button>
+
+  <button type="button" class="btn btn-ghost" onclick="limparDados()">🗑️ Limpar Dados</button>
+</div>
+
+<div id="toastMessage"></div>
+
+</form>
+
+<div id="status" class="muted" style="margin-top:8px;"></div>
+
+<footer>
+  Arquivo gerado localmente — funciona offline (salvar como HTML e abrir no navegador).
+</footer>
+
+</div>
+
+<script>
+// Helpers seguros (não redeclara se já existir)
+if (typeof window.$ === 'undefined') {
+  window.$ = (s) => document.querySelector(s);
+}
+if (typeof window.$$ === 'undefined') {
+  window.$$ = (s) => Array.from(document.querySelectorAll(s));
+}
+if (typeof window.escapeHtml === 'undefined') {
+  window.escapeHtml = (str) => String(str || '')
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+if (typeof window.capitalizeWords === 'undefined') {
+  window.capitalizeWords = (str) => (str||'').toLowerCase()
+    .split(' ')
+    .filter(Boolean)
+    .map(w => (w[0] ? w[0].toUpperCase() : '') + w.slice(1))
+    .join(' ');
+}
+</script>
+
+<script>
+/* ---------- helpers (comentei para não dar erro) ---------- 
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+function capitalizeWords(str){ return (str||'').toLowerCase().split(' ').filter(Boolean).map(w=>w[0]?.toUpperCase()+w.slice(1)).join(' '); }
+---------------------------------------------------------------*/
+
+/* ---------- conflicts (sentido/pista/faixa/tracado) ---------- */
+function setupConflicts() {
+  const sent = document.querySelectorAll('#sentido input[type=checkbox]');
+
+  sent.forEach(cb => cb.addEventListener('change', () => {
+
+    if (cb.checked) {
+      // Desmarca e desabilita todos os outros (mantive sua lógica original)
+      sent.forEach(other => {
+        if (other !== cb) {
+          other.checked = false;
+          other.disabled = true;
+        }
+      });
+
+    } else {
+      // Reabilita tudo ao desmarcar
+      sent.forEach(other => {
+        other.disabled = false;
+      });
+    }
+
+  }));
+}
+
+// >>> INÍCIO ALTERAÇÃO: disableByValue (necessária para PISTA)
+function disableByValue(list, val, disable){
+  list.forEach(el=>{
+    if(el.value === val){
+      el.disabled = disable;
+      el.parentElement.style.opacity = disable ? 0.5 : 1;
+      if(disable) el.checked = false;
+    }
+  });
+}
+
+// >>> FIM ALTERAÇÃO: disableByValue
+
+// PISTA DE TRÁFEGO (mantido)
+// (ajuste: evita ReferenceError caso 'pista' não exista neste bloco)
+(() => {
+  const pistaEls = document.querySelectorAll('#pista input[type=checkbox]');
+  pistaEls.forEach(cb=>cb.addEventListener('change', ()=>{
+    if(cb.checked){
+      if(cb.value==='PRINCIPAL') disableByValue(pistaEls,'MARGINAL',true);
+      if(cb.value==='MARGINAL')  disableByValue(pistaEls,'PRINCIPAL',true);
+    } else {
+      disableByValue(pistaEls,'PRINCIPAL',false);
+      disableByValue(pistaEls,'MARGINAL',false);
+    }
+  }));
+})();
+
+// >>> INÍCIO ALTERAÇÃO: TRAÇADO (novo bloco completo + OUTROS + reset)
+document.addEventListener('DOMContentLoaded', () => {
+  const tracado = Array.from(document.querySelectorAll('#tracado input[type=checkbox]'));
+  const outrosCb  = document.querySelector('#tracado input[value="OUTROS"]');
+  const outrosTxt = document.getElementById('tracado_outros_txt');
+
+  const conflictPairs = [
+    ['RETA','CURVA SUAVE'],
+    ['RETA','CURVA ACENTUADA'],
+    ['CURVA SUAVE','CURVA ACENTUADA'],
+    ['ACLIVE','DECLIVE'],
+    ['ACLIVE','NÍVEL'],
+    ['DECLIVE','NÍVEL'],
+    ['BARREIRA CENTRAL','DEFENSA CENTRAL'],
+    ['BARREIRA LATERAL','DEFENSA LATERAL'],
+    ['GRAMADO LATERAL','GRAMADO CENTRAL'],
+    ['TALUDE','GRAMADO LATERAL'],
+    ['TALUDE','DEFENSA LATERAL'],
+    ['TALUDE','BARREIRA LATERAL'],
+    ['MEIO FIO','GRAMADO LATERAL'],
+    ['MEIO FIO','DEFENSA LATERAL'],
+    ['MEIO FIO','BARREIRA LATERAL'],
+    ['MEIO FIO','TALUDE']
+  ];
+
+  const conflicts = {};
+  conflictPairs.forEach(([a,b])=>{
+    (conflicts[a] ||= []).push(b);
+    (conflicts[b] ||= []).push(a);
+  });
+
+  function refreshTracado(){
+    const checked = tracado.filter(x=>x.checked).map(x=>x.value);
+
+    // aplica conflitos
+    tracado.forEach(cb=>{
+      const list = conflicts[cb.value] || [];
+      const disable = checked.some(val => val !== cb.value && list.includes(val));
+      cb.disabled = disable;
+      cb.parentElement.style.opacity = disable ? 0.5 : 1;
+      if(disable) cb.checked = false;
+    });
+
+    // toggle OUTROS + acessibilidade
+    if(outrosCb && outrosTxt){
+      const show = outrosCb.checked;
+      outrosTxt.classList.toggle('hidden', !show);
+      outrosTxt.required = show;
+      // ARIA
+      outrosCb.setAttribute('aria-expanded', show ? 'true' : 'false');
+      outrosTxt.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+  }
+
+  tracado.forEach(cb => cb.addEventListener('change', refreshTracado));
+  // RESET INICIAL
+  refreshTracado();
+});
+// >>> FIM ALTERAÇÃO: TRAÇADO
+
+/* ---------- vehicles builder ---------- */
+ // >>> DUPLICADO const veiculosArea = $('#veiculosArea');
+ // >>> DUPLICADO const numVeic = $('#numVeiculos');
+ // >>> DUPLICADO let vehicleCounter = 0; // IDs únicos
+
+function buildVehicles(n){
+  veiculosArea.innerHTML = '';
+  vehicleCounter = 0;
+
+  for(let i = 0; i < n; i++){
+    vehicleCounter++;
+    const id = 'V' + vehicleCounter;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'vehicle';
+    wrap.dataset.id = id;
+    wrap.innerHTML = `
+  <h3>${id} — DADOS DO VEÍCULO</h3>
+
+  <label>TIPO:</label>
+  <input name="${id}_tipo" type="text" placeholder="Ex: MOTO, AP, CA, ON..." required>
+
+  <label>MARCA:</label>
+  <input name="${id}_marca" type="text" required>
+
+  <label>MODELO:</label>
+  <input name="${id}_modelo" type="text" required>
+
+  <label>PLACAS:</label>
+  <input name="${id}_placas" type="text" pattern="[A-Za-z0-9\\- ]+" required>
+
+  <label>FAIXA QUE TRAFEGAVA <span class="muted">*</span></label>
+  <div class="checkbox-group" id="${id}_faixaGroup">
+    <label><input type="checkbox" name="${id}_faixa" value="1"> 1</label>
+    <label><input type="checkbox" name="${id}_faixa" value="2"> 2</label>
+    <label><input type="checkbox" name="${id}_faixa" value="3"> 3</label>
+    <label><input type="checkbox" name="${id}_faixa" value="4"> 4</label>
+    <label><input type="checkbox" name="${id}_faixa" value="5"> 5</label>
+  </div>
+      
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div style="flex:1">
+      <label>CINTOS</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_cintos" value="OK"> OK</label>
+        <label><input type="checkbox" name="${id}_cintos" value="OUTRO"> OUTRO</label>
+      </div>
+      <input name="${id}_cintos_out" placeholder="Descreva (max 20)" maxlength="20" class="hidden">
+    </div>
+    <div style="width:160px">
+      <label>PNEUS</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_pneus" value="OK"> OK</label>
+        <label><input type="checkbox" name="${id}_pneus" value="OUTRO"> OUTRO</label>
+      </div>
+      <input name="${id}_pneus_out" placeholder="Descreva (max 20)" maxlength="20" class="hidden">
+    </div>
+  </div>
+      
+  <label>N° DE OCUPANTES:</label><input name="${id}_ocup" type="number" min="0" required>
+      
+  <label>TEM SEGURO?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_seg" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_seg" value="NAO"> NÃO</label>
+  </div>
+  <input name="${id}_seguradora" placeholder="NOME DA SEGURADORA" class="hidden">
+
+  <label>É VEÍCULO DE EMPRESA OU TERCEIRO?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_empresa" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_empresa" value="NAO"> NÃO</label>
+  </div>
+  <div class="empresaDados hidden">
+    <label>CPF/CNPJ/RG:</label><input name="${id}_emp_id" type="text">
+    <label>NOME:</label><input name="${id}_emp_nome" type="text">
+    <label>TEL:</label><input name="${id}_emp_tel" type="text">
+    <label>ENDEREÇO:</label><input name="${id}_emp_end" type="text">
+  </div>
+
+  <h4>CONDUTOR DO VEÍCULO</h4>
+  <label>NOME:</label><input name="${id}_cond_nome" type="text" required>
+  <label>CPF:</label><input name="${id}_cond_cpf" type="text" required>
+  <label>RG:</label><input name="${id}_cond_rg" type="text" required>
+  <label>TEL:</label><input name="${id}_cond_tel" type="text" required>
+  <label>END.:</label><input name="${id}_cond_end" type="text" required>
+
+  <label>HOUVE DANOS AO PATRIMÔNIO?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_danos" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_danos" value="NAO"> NÃO</label>
+  </div>
+  <textarea name="${id}_danos_rel" class="hidden" placeholder="RELATE OS DANOS"></textarea>
+
+  <label>TEM CARGA DE PRODUTO PERIGOSO (PP)?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_pp" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_pp" value="NAO"> NÃO</label>
+  </div>
+  <div class="prodDados hidden">
+    <label>TIPO DE PRODUTO:</label><input name="${id}_pp_tipo" type="text">
+    <label>Nº DA ONU:</label><input name="${id}_pp_onu" type="text">
+    <label>Nº DO RÓTULO DE RISCO:</label><input name="${id}_pp_rot" type="text">
+    <label>RESPONSÁVEL TÉCNICO:</label><input name="${id}_pp_resp" type="text">
+    <label>ORIGEM:</label><input name="${id}_pp_origem" type="text">
+    <label>DESTINO:</label><input name="${id}_pp_destino" type="text">
+    <label>OUTROS:</label><input name="${id}_pp_out" type="text">
+  </div>
+      
+  <div class="photos-block" id="photosBlock_${id}">
+    <button type="button" class="addPhotosBtn" data-id="${id}">Adicionar Fotos</button>
+    <input type="file" id="fileInput_${id}" name="fotos_${id}[]" accept="image/*" multiple style="display:none">
+    <div class="photosPreview" id="photosPreview_${id}"></div>
+  </div>
+    `;
+
+    veiculosArea.appendChild(wrap);
+
+    // Fotos
+    const addBtn = wrap.querySelector('.addPhotosBtn');
+    const fileInput = wrap.querySelector('#fileInput_' + id);
+    const previewArea = wrap.querySelector('#photosPreview_' + id);
+
+    addBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (ev) => {
+      const files = Array.from(ev.target.files);
+      files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function(loadEv) {
+          const src = loadEv.target.result;
+          const thumbWrap = document.createElement('div');
+          thumbWrap.className = 'thumbWrap';
+          const img = document.createElement('img');
+          img.className = 'photo';
+          img.src = src;
+          img.alt = id + ' photo';
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'removePhotoBtn';
+          removeBtn.textContent = 'Remover';
+          thumbWrap.appendChild(img);
+          thumbWrap.appendChild(removeBtn);
+          previewArea.appendChild(thumbWrap);
+          removeBtn.addEventListener('click', () => {
+            previewArea.removeChild(thumbWrap);
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+      fileInput.value = '';
+    });
+
+    // Eventos toggle (escopo do veículo)
+    const setToggle = (checkboxName, outName, wrapperSelector) => {
+      const cbs = wrap.querySelectorAll(`input[name="${checkboxName}"]`);
+      cbs.forEach(cb=>cb.addEventListener('change', ()=>{
+        cbs.forEach(o=>{ if(o!==cb) o.checked=false; });
+        const out = wrapperSelector ? wrap.querySelector(wrapperSelector) : wrap.querySelector(`[name="${outName}"]`);
+        if(out) out.classList.toggle('hidden', !Array.from(cbs).some(x=>x.checked && (x.value==='OUTRO' || x.value==='SIM')));
+        if(out) out.required = Array.from(cbs).some(x=>x.checked && (x.value==='OUTRO' || x.value==='SIM'));
+      }));
+    };
+
+    setToggle(`${id}_cintos`, `${id}_cintos_out`);
+    setToggle(`${id}_pneus`, `${id}_pneus_out`);
+    setToggle(`${id}_seg`, `${id}_seguradora`);
+    setToggle(`${id}_empresa`, null, '.empresaDados');
+    setToggle(`${id}_danos`, `${id}_danos_rel`);
+    setToggle(`${id}_pp`, null, '.prodDados');
+
+    // Exclusividade por faixa (checkboxes agem como "radio")
+    (() => {
+      const faixaCbs = wrap.querySelectorAll(`input[name="${id}_faixa"]`);
+      faixaCbs.forEach(cb => cb.addEventListener('change', () => {
+        if (cb.checked) faixaCbs.forEach(o => { if (o !== cb) o.checked = false; });
+      }));
+    })();
+  }
+}
+
+numVeic.addEventListener('change', ()=>{
+  let n = parseInt(numVeic.value)||1;
+  if(n<1) n=1;
+  if(n>40 && !confirm('Número grande de veículos. Continuar?')){ numVeic.value=40; n=40; }
+  buildVehicles(n);
+});
+buildVehicles(parseInt(numVeic.value || 1));
+
+/* ---------- photos ---------- */
+$('#btnAddPhotos').addEventListener('click', ()=> $('#photos').click());
+$('#photos').addEventListener('change', (e)=>{
+  const files = Array.from(e.target.files || []);
+  $('#status').textContent = `${files.length} foto(s) selecionada(s)`;
+});
+
+/* ---------- printable HTML builder ---------- */
+async function buildPrintableHTML() {
+  const escapeHtml = (str) =>
+    String(str || '')
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  const data = {
+    ev: (document.getElementById('ev')?.value || '').trim(),
+    data: document.getElementById('data')?.value || '',
+    hora: document.getElementById('time')?.value || '',
+    tipo: document.getElementById('tipo')?.value || '',
+    responsavel: document.getElementById('responsavel')?.value || '',
+    prefixo: document.getElementById('prefixoViatura')?.value || '',
+    prefixo_pmr_no_local: (document.getElementById('prefixoPMR')?.value || '').trim(),
+    rodovia: (document.getElementById('rodovia')?.value || '').trim(),
+    km: (document.getElementById('km')?.value || '').trim(),
+    sentido: Array.from(document.querySelectorAll('#sentido input:checked')).map(i => i.value).join(' • '),
+    pista:   Array.from(document.querySelectorAll('#pista input:checked')).map(i => i.value).join(' • '),
+    tracado: (() => {
+      const checked = Array.from(document.querySelectorAll('#tracado input:checked')).map(i => i.value);
+      const outrosEl  = document.getElementById('tracado_outros_txt');
+      const outrosVal = outrosEl ? (outrosEl.value || '').trim() : '';
+      let out = checked.join(' • ');
+      if (checked.includes('OUTROS') && outrosVal) {
+        out = out.replace('OUTROS', `OUTROS — ${outrosVal}`);
+      }
+      return out;
+    })(),
+    condicoes: (document.getElementById('condicoes_outras')?.value || '').trim() 
+               || Array.from(document.querySelectorAll('#condgroup input:checked')).map(i => i.value).join(' • '),
+    dinamica: (document.getElementById('dinamica')?.value || '').trim(),
+    observacoes: (document.getElementById('observacoes')?.value || '').trim(),
+    vehicles: []
+  };
+
+  // --- coleta dos veículos ---
+  const vdivs = Array.from(document.getElementById('veiculosArea')?.querySelectorAll('.vehicle') || []);
+  for (const v of vdivs) {
+    const id = v.dataset.id || (v.querySelector('h3')?.textContent.split(' ')[0] || 'V?');
+    const get = name => {
+      const el = v.querySelector(`[name="${name}"]`);
+      return el ? (el.value || '').trim() : '';
+    };
+    const pick = name => Array.from(v.querySelectorAll(`[name="${name}"]`)).find(x => x.checked)?.value || '';
+
+  const faixa = Array.from(v.querySelectorAll(`[name="${id}_faixa"]:checked`)).map(i => i.value).join(' • ');
+    const emp_flag   = pick(`${id}_empresa`);
+    const danos_flag = pick(`${id}_danos`);
+    const pp_flag    = pick(`${id}_pp`);
+
+    data.vehicles.push({
+      id,
+      tipo: get(`${id}_tipo`),
+      marca: get(`${id}_marca`),
+      modelo: get(`${id}_modelo`),
+      placas: get(`${id}_placas`),
+      faixa,
+      ocup: get(`${id}_ocup`),
+      cintos: pick(`${id}_cintos`),
+      cintos_out: get(`${id}_cintos_out`),
+      pneus: pick(`${id}_pneus`),
+      pneus_out: get(`${id}_pneus_out`),
+      seg: pick(`${id}_seg`),
+      seguradora: get(`${id}_seguradora`),
+      empresa: emp_flag === 'SIM' ? {
+        id: get(`${id}_emp_id`),
+        nome: get(`${id}_emp_nome`),
+        tel: get(`${id}_emp_tel`),
+        end: get(`${id}_emp_end`)
+      } : null,
+      condutor: {
+        nome: get(`${id}_cond_nome`),
+        cpf: get(`${id}_cond_cpf`),
+        rg: get(`${id}_cond_rg`),
+        tel: get(`${id}_cond_tel`),
+        end: get(`${id}_cond_end`)
+      },
+      danos_flag,
+      danos_rel: get(`${id}_danos_rel`),
+      pp_flag,
+      pp: pp_flag === 'SIM' ? {
+        tipo: get(`${id}_pp_tipo`),
+        onu: get(`${id}_pp_onu`),
+        rot: get(`${id}_pp_rot`),
+        resp: get(`${id}_pp_resp`),
+        origem: get(`${id}_pp_origem`),
+        destino: get(`${id}_pp_destino`),
+        outs: get(`${id}_pp_out`)
+      } : null,
+      photos: [] // (se quiser futuramente levar fotos por veículo, preenche aqui)
+    });
+  }
+
+  // --- fotos do local/cena (opcional) ---
+  const sceneInput = document.getElementById('scene_photos');
+  const sceneFiles = Array.from(sceneInput?.files || []).slice(0, 50);
+  const scenePhotos = await Promise.all(sceneFiles.map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.readAsDataURL(f);
+  })));
+
+  // --- MONTA O HTML ---
+  let html = `<!doctype html><html><head><meta charset="utf-8"><title>Checklist de Acidentes</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;padding:12px;color:#000}
+      h1{color:#4b2fb0;font-weight:800;text-align:center;margin:0 0 20px}
+      h2{font-weight:700;margin:16px 0 8px;color:#4b2fb0}
+      h3{font-weight:700;margin:12px 0 6px;color:#555}
+      p{
+  margin:6px 0;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  flex-wrap:nowrap;
+}
+p strong{
+  min-width:220px;
+  display:inline-block;
+  white-space:nowrap;
+}
+p span.val{
+  flex:1;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+      .section{margin-bottom:12px;border-bottom:1px solid #ccc;padding-bottom:8px}
+      img{max-width:48%;margin:4px;border:1px solid #ddd}
+    </style></head><body>`;
+
+  tml += `<div class="section">
+  <p><strong>EV N°:</strong> <span class="val">${escapeHtml(data.ev)}</span></p>
+  <p><strong>DATA:</strong> <span class="val">${escapeHtml(data.data)}</span></p>
+  <p><strong>HORA:</strong> <span class="val">${escapeHtml(data.hora)}</span></p>
+  <p><strong>TIPO DE ACIDENTE:</strong> <span class="val">${escapeHtml(data.tipo)}</span></p>
+
+  <p><strong>RESPONSÁVEL:</strong> <span class="val">${escapeHtml(data.responsavel)}</span></p>
+  <p><strong>PREFIXO DA VIATURA:</strong> <span class="val">${escapeHtml(data.prefixo)}</span></p>
+
+  ${data.prefixo_pmr_no_local ? `<p><strong>PREFIXO PMR NO LOCAL:</strong> <span class="val">${escapeHtml(data.prefixo_pmr_no_local)}</span></p>` : ''}
+
+  <p><strong>RODOVIA:</strong> <span class="val">${escapeHtml(data.rodovia)}</span></p>
+  <p><strong>KM:</strong> <span class="val">${escapeHtml(data.km)}</span></p>
+  <p><strong>SENTIDO:</strong> <span class="val">${escapeHtml(data.sentido)}</span></p>
+  <p><strong>PISTA:</strong> <span class="val">${escapeHtml(data.pista)}</span></p>
+  <p><strong>TRAÇADO:</strong> <span class="val">${escapeHtml(data.tracado)}</span></p>
+  <p><strong>CONDIÇÕES ADVERSAS:</strong> <span class="val">${escapeHtml(data.condicoes)}</span></p>
+</div>`;
+
+  // --- seção de veículos ---
+  data.vehicles.forEach(v => {
+    html += `<div class="section"><h2>${escapeHtml(v.id)} — DADOS DO VEÍCULO</h2>
+      <p><strong>MARCA:</strong> ${escapeHtml(v.marca)}</p>
+      <p><strong>MODELO:</strong> ${escapeHtml(v.modelo)}</p>
+      <p><strong>PLACAS:</strong> ${escapeHtml(v.placas)}</p>
+      <p><strong>TIPO:</strong> ${escapeHtml(v.tipo)}</p>
+      <p><strong>FAIXA QUE TRAFEGAVA:</strong> ${escapeHtml(v.faixa)}</p>
+      <p><strong>CINTOS:</strong> ${escapeHtml(v.cintos)}${v.cintos_out ? ' — ' + escapeHtml(v.cintos_out) : ''}</p>
+      <p><strong>PNEUS:</strong> ${escapeHtml(v.pneus)}${v.pneus_out ? ' — ' + escapeHtml(v.pneus_out) : ''}</p>
+      <p><strong>Nº DE OCUPANTES:</strong> ${escapeHtml(v.ocup)}</p>
+      <p><strong>TEM SEGURO:</strong> ${escapeHtml(v.seg)}</p>
+      ${v.seguradora ? `<p><strong>NOME DA SEGURADORA:</strong> ${escapeHtml(v.seguradora)}</p>` : ''}`;
+
+    if (v.empresa) {
+      html += `<h3>DADOS DA EMPRESA / TERCEIRO</h3>
+        <p><strong>CPF/CNPJ/RG:</strong> ${escapeHtml(v.empresa.id)}</p>
+        <p><strong>NOME:</strong> ${escapeHtml(v.empresa.nome)}</p>
+        <p><strong>TEL:</strong> ${escapeHtml(v.empresa.tel)}</p>
+        <p><strong>ENDEREÇO:</strong> ${escapeHtml(v.empresa.end)}</p>`;
+    }
+
+    const c = v.condutor;
+    html += `<h3>CONDUTOR</h3>
+      <p><strong>NOME:</strong> ${escapeHtml(c.nome)}</p>
+      <p><strong>CPF:</strong> ${escapeHtml(c.cpf)}</p>
+      <p><strong>RG:</strong> ${escapeHtml(c.rg)}</p>
+      <p><strong>TEL:</strong> ${escapeHtml(c.tel)}</p>
+      <p><strong>ENDEREÇO:</strong> ${escapeHtml(c.end)}</p>`;
+
+    if (v.danos_flag === 'SIM') {
+      html += `<h3>RELATE OS DANOS</h3><p>${escapeHtml(v.danos_rel)}</p>`;
+    }
+    if (v.pp_flag === 'SIM' && v.pp) {
+      html += `<h3>PP</h3>
+        <p><strong>TIPO:</strong> ${escapeHtml(v.pp.tipo)}</p>
+        <p><strong>ONU:</strong> ${escapeHtml(v.pp.onu)}</p>
+        <p><strong>RÓTULO:</strong> ${escapeHtml(v.pp.rot)}</p>
+        <p><strong>RESPONSÁVEL:</strong> ${escapeHtml(v.pp.resp)}</p>
+        <p><strong>ORIGEM:</strong> ${escapeHtml(v.pp.origem)}</p>
+        <p><strong>DESTINO:</strong> ${escapeHtml(v.pp.destino)}</p>
+        <p><strong>OUTROS:</strong> ${escapeHtml(v.pp.outs)}</p>`;
+    }
+
+    if (v.photos && v.photos.length) {
+      html += '<h3>FOTOS DO VEÍCULO</h3>';
+      v.photos.forEach(p => html += `<img src="${p}">`);
+    }
+
+    html += `</div>`;
+  });
+
+  // --- demais seções ---
+  if (data.dinamica)    html += `<h2>DINÂMICA</h2><p>${escapeHtml(data.dinamica)}</p>`;
+  if (data.prefixo_pmr_no_local) {
+  html += `<h2>PREFIXO PMR NO LOCAL</h2>
+           <p>${escapeHtml(data.prefixo_pmr_no_local)}</p>`;
+}
+  if (data.observacoes) html += `<h2>OBSERVAÇÕES</h2><p>${escapeHtml(data.observacoes)}</p>`;
+
+  if (scenePhotos && scenePhotos.length) {
+    html += '<h2>FOTOS DO LOCAL/CENA DO ACIDENTE</h2>';
+    scenePhotos.forEach(p => html += `<img src="${p}">`);
+  }
+
+  html += '</body></html>';
+  return html;
+}
+
+/* >>> INÍCIO: utils & validações (cole após buildPrintableHTML) */
+
+// slug para nome de arquivo seguro
+function slug(s){
+  return String(s || '')
+    .normalize('NFD')                   // remove acentos
+    .replace(/[\u0300-\u036f]/g, '')    // remove marcas diacríticas
+    .replace(/[^\w\-]+/g, '_')          // troca caracteres inválidos por _
+    .replace(/_+/g, '_')                // evita múltiplos ___
+    .slice(0, 40)                       // limita tamanho
+    || 'ACIDENTE';
+}
+
+// valida campos essenciais do cabeçalho
+function validaCamposBasicos(){
+  const campos = [
+    ['#ev',           'EV'],
+    ['#data',         'Data'],
+    ['#time',         'Hora'],
+    ['#tipo',         'Tipo de acidente'],
+    ['#responsavel',  'Responsável'],
+    ['#rodovia',      'Rodovia']
+  ];
+  for (const [sel, label] of campos){
+    const el = document.querySelector(sel);
+    const val = String(el?.value || '').trim();
+    if (!val) {
+      showToast(`Preencha: ${label}`);
+      if (el && typeof el.focus === 'function') {
+        el.focus();
+        try { el.scrollIntoView({behavior:'smooth', block:'center'}); } catch(_) {}
+        try { el.reportValidity?.(); } catch(_) {}
+      }
+      return false;
+    }
+  }
+  return true;
+}
+
+// valida faixa marcada em cada veículo
+function validaFaixasObrigatorias(){
+  const vehicles = Array.from(document.querySelectorAll('.vehicle'));
+  for(const v of vehicles){
+    const id = v.dataset.id;
+    const faixaMarcada = v.querySelector(`input[name="${id}_faixa"]:checked`);
+    if(!faixaMarcada){
+      showToast(`Selecione a FAIXA no veículo ${id}.`);
+      return false;
+    }
+  }
+  return true;
+}
+/* >>> FIM: utils & validações */
+/* ---------- buttons (atualizados: valida básicos + faixas) ---------- */
+$('#btnPdf').addEventListener('click', async ()=>{
+  if(!validaCamposBasicos() || !validaFaixasObrigatorias()) return;
+  try{
+    const printable = await buildPrintableHTML();
+    const blob = new Blob([printable], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+
+    const evSafe = slug($('#ev')?.value);
+    const fname  = `ACIDENTE_${evSafe || 'EV'}_${new Date().toISOString().slice(0,10)}.html`;
+
+    const w = window.open(url, '_blank');
+    if (w) {
+      w.onload = ()=>{ try{ w.focus(); w.print(); } catch(_){} };
+    } else {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fname;
+      a.click();
+      URL.revokeObjectURL(url);
+      alert('Não foi possível abrir nova janela — arquivo HTML gerado para download.');
+    }
+  } catch(err){
+    alert('Erro: ' + (err?.message || err));
+  }
+});
+
+$('#btnShare').addEventListener('click', async ()=>{
+  if(!validaCamposBasicos() || !validaFaixasObrigatorias()) return;
+  try{
+    const printable = await buildPrintableHTML();
+    const blob = new Blob([printable], {type:'text/html'});
+
+    const evSafe = slug($('#ev')?.value);
+    const fname  = `ACIDENTE_${evSafe || 'EV'}_${new Date().toISOString().slice(0,10)}.html`;
+
+    const file = new File([blob], fname, {type:'text/html'});
+
+    if (navigator.canShare && navigator.canShare({files:[file]})) {
+      await navigator.share({ title:'Checklist de Acidente', files:[file] });
+    } else if (navigator.share) {
+      const url = URL.createObjectURL(blob);
+      await navigator.share({ title:'Checklist de Acidente', text:'Checklist preenchido.', url });
+      URL.revokeObjectURL(url);
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fname;
+      a.click();
+      URL.revokeObjectURL(url);
+      alert('Compartilhamento nativo não disponível — arquivo HTML gerado para download.');
+    }
+  } catch(err){
+    alert('Erro ao compartilhar: ' + (err?.message || err));
+  }
+});
+
+/* ---------- small UX helpers ---------- */
+document.addEventListener('blur', (e)=>{
+  if(e.target.tagName==='INPUT' && e.target.type==='text'){
+    // (mantido vazio conforme seu ajuste)
+  }
+}, true);
+
+// >>> INÍCIO ALTERAÇÃO: init no DOM pronto (evita falha do SENTIDO)
+function init(){
+  setupConflicts();
+}
+document.addEventListener('DOMContentLoaded', init);
+// >>> FIM ALTERAÇÃO: init
+</script>
+
+<script>
+/* === SALVAR AUTOMATICAMENTE OS DADOS (multi-valor) === */
+function salvarFormulario() {
+  const form = document.querySelector('form');
+  const fd = new FormData(form);
+  const store = {};
+
+  // agrega múltiplos valores por "name"
+  for (const [k, v] of fd.entries()) {
+    if (store[k] === undefined) {
+      store[k] = v;
+    } else if (Array.isArray(store[k])) {
+      store[k].push(v);
+    } else {
+      store[k] = [store[k], v];
+    }
+  }
+
+  // guarda também a contagem de veículos (se existir)
+  const num = document.getElementById('numVeiculos');
+  if (num) store.__numVeiculos = parseInt(num.value || '1', 10);
+
+  localStorage.setItem('formAcidente', JSON.stringify(store));
+}
+
+/* === RESTAURAR DADOS SALVOS (inclui veículos e checkboxes) === */
+function restaurarFormulario() {
+  const salvo = localStorage.getItem('formAcidente');
+  if (!salvo) return;
+
+  const data = JSON.parse(salvo);
+  const form = document.querySelector('form');
+
+  // 1) Restaura número de veículos antes de aplicar campos
+  const num = document.getElementById('numVeiculos');
+  if (num && data.__numVeiculos) {
+    num.value = data.__numVeiculos;
+    if (typeof buildVehicles === 'function') {
+      buildVehicles(parseInt(num.value || '1', 10));
+    }
+  }
+
+  // 2) Aplica valores por "name"
+  Object.keys(data).forEach(name => {
+    if (name === '__numVeiculos') return; // meta
+
+    const value = data[name];
+    const nodes = form.querySelectorAll(`[name="${name}"]`);
+    if (!nodes.length) return;
+
+    if (nodes.length > 1) {
+      const values = Array.isArray(value) ? value : [value];
+      nodes.forEach(node => {
+        if (node.type === 'checkbox' || node.type === 'radio') {
+          node.checked = values.includes(node.value);
+        } else {
+          node.value = values[0] ?? '';
+        }
+      });
+    } else {
+      const el = nodes[0];
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        const values = Array.isArray(value) ? value : [value];
+        el.checked = values.includes(el.value);
+      } else {
+        el.value = Array.isArray(value) ? value[0] : value;
+      }
+    }
+  });
+}
+
+/* === EVENTOS DE PERSISTÊNCIA === */
+document.addEventListener('DOMContentLoaded', () => {
+  restaurarFormulario();
+  const form = document.querySelector('form');
+  if (form) form.addEventListener('input', salvarFormulario);
+});
+
+// === LIMPAR OS DADOS ===
+function limparDados() {
+  if (confirm('Tem certeza que deseja limpar todos os dados do formulário?')) {
+    localStorage.removeItem('formAcidente');
+    document.querySelector('form').reset();
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toastMessage');
+  t.textContent = msg;
+  t.classList.add('show');
+
+  setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+// === EVENTOS ===
+document.addEventListener('DOMContentLoaded', () => {
+  restaurarFormulario();
+  const form = document.querySelector('form');
+  if (form) form.addEventListener('input', salvarFormulario);
+});
+
+</script>
+
+<!-- Scripts consolidados -->
+<script>
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+function capitalizeWords(str){ return (str||'').toLowerCase().split(' ').filter(Boolean).map(w=>w[0]?.toUpperCase()+w.slice(1)).join(' '); }
+
+/* ---------- conflicts (sentido/pista/faixa/tracado) ---------- */
+function setupConflicts() {
+  const sent = document.querySelectorAll('#sentido input[type=checkbox]');
+
+  sent.forEach(cb => cb.addEventListener('change', () => {
+
+    if (cb.checked) {
+      // Desmarca e desabilita todos os outros (mantive sua lógica original)
+      sent.forEach(other => {
+        if (other !== cb) {
+          other.checked = false;
+          other.disabled = true;
+        }
+      });
+
+    } else {
+      // Reabilita tudo ao desmarcar
+      sent.forEach(other => {
+        other.disabled = false;
+      });
+    }
+
+  }));
+}
+
+// >>> INÍCIO ALTERAÇÃO: disableByValue (necessária para PISTA)
+function disableByValue(list, val, disable){
+  list.forEach(el=>{
+    if(el.value === val){
+      el.disabled = disable;
+      el.parentElement.style.opacity = disable ? 0.5 : 1;
+      if(disable) el.checked = false;
+    }
+  });
+}
+// >>> FIM ALTERAÇÃO: disableByValue
+
+// PISTA DE TRÁFEGO (mantido)
+const pista = document.querySelectorAll('#pista input[type=checkbox]');
+pista.forEach(cb=>cb.addEventListener('change', ()=>{
+  if(cb.checked){
+    if(cb.value==='PRINCIPAL') disableByValue(pista,'MARGINAL',true);
+    if(cb.value==='MARGINAL')  disableByValue(pista,'PRINCIPAL',true);
+  } else {
+    disableByValue(pista,'PRINCIPAL',false);
+    disableByValue(pista,'MARGINAL',false);
+  }
+}));
+
+// >>> INÍCIO ALTERAÇÃO: TRAÇADO (novo bloco completo + OUTROS + reset)
+document.addEventListener('DOMContentLoaded', () => {
+  const tracado = Array.from(document.querySelectorAll('#tracado input[type=checkbox]'));
+  const outrosCb  = document.querySelector('#tracado input[value="OUTROS"]');
+  const outrosTxt = document.getElementById('tracado_outros_txt');
+
+  const conflictPairs = [
+    ['RETA','CURVA SUAVE'],
+    ['RETA','CURVA ACENTUADA'],
+    ['CURVA SUAVE','CURVA ACENTUADA'],
+    ['ACLIVE','DECLIVE'],
+    ['ACLIVE','NÍVEL'],
+    ['DECLIVE','NÍVEL'],
+    ['BARREIRA CENTRAL','DEFENSA CENTRAL'],
+    ['BARREIRA LATERAL','DEFENSA LATERAL'],
+    ['GRAMADO LATERAL','GRAMADO CENTRAL'],
+    ['TALUDE','GRAMADO LATERAL'],
+    ['TALUDE','DEFENSA LATERAL'],
+    ['TALUDE','BARREIRA LATERAL'],
+    ['MEIO FIO','GRAMADO LATERAL'],
+    ['MEIO FIO','DEFENSA LATERAL'],
+    ['MEIO FIO','BARREIRA LATERAL'],
+    ['MEIO FIO','TALUDE']
+  ];
+
+  const conflicts = {};
+  conflictPairs.forEach(([a,b])=>{
+    (conflicts[a] ||= []).push(b);
+    (conflicts[b] ||= []).push(a);
+  });
+
+  function refreshTracado(){
+    const checked = tracado.filter(x=>x.checked).map(x=>x.value);
+
+    // aplica conflitos
+    tracado.forEach(cb=>{
+      const list = conflicts[cb.value] || [];
+      const disable = checked.some(val => val !== cb.value && list.includes(val));
+      cb.disabled = disable;
+      cb.parentElement.style.opacity = disable ? 0.5 : 1;
+      if(disable) cb.checked = false;
+    });
+
+    // toggle OUTROS + acessibilidade
+    if(outrosCb && outrosTxt){
+      const show = outrosCb.checked;
+      outrosTxt.classList.toggle('hidden', !show);
+      outrosTxt.required = show;
+      // ARIA
+      outrosCb.setAttribute('aria-expanded', show ? 'true' : 'false');
+      outrosTxt.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+  }
+
+  tracado.forEach(cb => cb.addEventListener('change', refreshTracado));
+  // RESET INICIAL
+  refreshTracado();
+});
+// >>> FIM ALTERAÇÃO: TRAÇADO
+
+/* ---------- vehicles builder ---------- */
+const veiculosArea = $('#veiculosArea');
+const numVeic = $('#numVeiculos');
+let vehicleCounter = 0; // IDs únicos
+
+function buildVehicles(n){
+  veiculosArea.innerHTML = '';
+  vehicleCounter = 0;
+
+  for(let i = 0; i < n; i++){
+    vehicleCounter++;
+    const id = 'V' + vehicleCounter;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'vehicle';
+    wrap.dataset.id = id;
+    wrap.innerHTML = `
+  <h3>${id} — DADOS DO VEÍCULO</h3>
+
+  <label>TIPO:</label>
+  <input name="${id}_tipo" type="text" placeholder="Ex: MOTO, AP, CA, ON..." required>
+
+  <label>MARCA:</label>
+  <input name="${id}_marca" type="text" required>
+
+  <label>MODELO:</label>
+  <input name="${id}_modelo" type="text" required>
+
+  <label>PLACAS:</label>
+  <input name="${id}_placas" type="text" pattern="[A-Za-z0-9\\- ]+" required>
+
+  <label>FAIXA QUE TRAFEGAVA <span class="muted">*</span></label>
+  <div class="checkbox-group" id="${id}_faixaGroup">
+    <label><input type="checkbox" name="${id}_faixa" value="1"> 1</label>
+    <label><input type="checkbox" name="${id}_faixa" value="2"> 2</label>
+    <label><input type="checkbox" name="${id}_faixa" value="3"> 3</label>
+    <label><input type="checkbox" name="${id}_faixa" value="4"> 4</label>
+    <label><input type="checkbox" name="${id}_faixa" value="5"> 5</label>
+  </div>
+      
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <div style="flex:1">
+      <label>CINTOS</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_cintos" value="OK"> OK</label>
+        <label><input type="checkbox" name="${id}_cintos" value="OUTRO"> OUTRO</label>
+      </div>
+      <input name="${id}_cintos_out" placeholder="Descreva (max 20)" maxlength="20" class="hidden">
+    </div>
+    <div style="width:160px">
+      <label>PNEUS</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_pneus" value="OK"> OK</label>
+        <label><input type="checkbox" name="${id}_pneus" value="OUTRO"> OUTRO</label>
+      </div>
+      <input name="${id}_pneus_out" placeholder="Descreva (max 20)" maxlength="20" class="hidden">
+    </div>
+  </div>
+      
+  <label>N° DE OCUPANTES:</label><input name="${id}_ocup" type="number" min="0" required>
+      
+  <label>TEM SEGURO?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_seg" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_seg" value="NAO"> NÃO</label>
+  </div>
+  <input name="${id}_seguradora" placeholder="NOME DA SEGURADORA" class="hidden">
+
+  <label>É VEÍCULO DE EMPRESA OU TERCEIRO?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_empresa" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_empresa" value="NAO"> NÃO</label>
+  </div>
+  <div class="empresaDados hidden">
+    <label>CPF/CNPJ/RG:</label><input name="${id}_emp_id" type="text">
+    <label>NOME:</label><input name="${id}_emp_nome" type="text">
+    <label>TEL:</label><input name="${id}_emp_tel" type="text">
+    <label>ENDEREÇO:</label><input name="${id}_emp_end" type="text">
+  </div>
+
+  <h4>CONDUTOR DO VEÍCULO</h4>
+  <label>NOME:</label><input name="${id}_cond_nome" type="text" required>
+  <label>CPF:</label><input name="${id}_cond_cpf" type="text" required>
+  <label>RG:</label><input name="${id}_cond_rg" type="text" required>
+  <label>TEL:</label><input name="${id}_cond_tel" type="text" required>
+  <label>END.:</label><input name="${id}_cond_end" type="text" required>
+
+  <label>HOUVE DANOS AO PATRIMÔNIO?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_danos" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_danos" value="NAO"> NÃO</label>
+  </div>
+  <textarea name="${id}_danos_rel" class="hidden" placeholder="RELATE OS DANOS"></textarea>
+
+  <label>TEM CARGA DE PRODUTO PERIGOSO (PP)?</label>
+  <div class="checkbox-group">
+    <label><input type="checkbox" name="${id}_pp" value="SIM"> SIM</label>
+    <label><input type="checkbox" name="${id}_pp" value="NAO"> NÃO</label>
+  </div>
+  <div class="prodDados hidden">
+    <label>TIPO DE PRODUTO:</label><input name="${id}_pp_tipo" type="text">
+    <label>Nº DA ONU:</label><input name="${id}_pp_onu" type="text">
+    <label>Nº DO RÓTULO DE RISCO:</label><input name="${id}_pp_rot" type="text">
+    <label>RESPONSÁVEL TÉCNICO:</label><input name="${id}_pp_resp" type="text">
+    <label>ORIGEM:</label><input name="${id}_pp_origem" type="text">
+    <label>DESTINO:</label><input name="${id}_pp_destino" type="text">
+    <label>OUTROS:</label><input name="${id}_pp_out" type="text">
+  </div>
+      
+  <div class="photos-block" id="photosBlock_${id}">
+    <button type="button" class="addPhotosBtn" data-id="${id}">Adicionar Fotos</button>
+    <input type="file" id="fileInput_${id}" name="fotos_${id}[]" accept="image/*" multiple style="display:none">
+    <div class="photosPreview" id="photosPreview_${id}"></div>
+  </div>
+    `;
+
+    veiculosArea.appendChild(wrap);
+
+    // Fotos
+    const addBtn = wrap.querySelector('.addPhotosBtn');
+    const fileInput = wrap.querySelector('#fileInput_' + id);
+    const previewArea = wrap.querySelector('#photosPreview_' + id);
+
+    addBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (ev) => {
+      const files = Array.from(ev.target.files);
+      files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function(loadEv) {
+          const src = loadEv.target.result;
+          const thumbWrap = document.createElement('div');
+          thumbWrap.className = 'thumbWrap';
+          const img = document.createElement('img');
+          img.className = 'photo';
+          img.src = src;
+          img.alt = id + ' photo';
+          const removeBtn = document.createElement('button');
+          removeBtn.type = 'button';
+          removeBtn.className = 'removePhotoBtn';
+          removeBtn.textContent = 'Remover';
+          thumbWrap.appendChild(img);
+          thumbWrap.appendChild(removeBtn);
+          previewArea.appendChild(thumbWrap);
+          removeBtn.addEventListener('click', () => {
+            previewArea.removeChild(thumbWrap);
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+      fileInput.value = '';
+    });
+
+    // Eventos toggle (escopo do veículo)
+    const setToggle = (checkboxName, outName, wrapperSelector) => {
+      const cbs = wrap.querySelectorAll(`input[name="${checkboxName}"]`);
+      cbs.forEach(cb=>cb.addEventListener('change', ()=>{
+        cbs.forEach(o=>{ if(o!==cb) o.checked=false; });
+        const out = wrapperSelector ? wrap.querySelector(wrapperSelector) : wrap.querySelector(`[name="${outName}"]`);
+        if(out) out.classList.toggle('hidden', !Array.from(cbs).some(x=>x.checked && (x.value==='OUTRO' || x.value==='SIM')));
+        if(out) out.required = Array.from(cbs).some(x=>x.checked && (x.value==='OUTRO' || x.value==='SIM'));
+      }));
+    };
+
+    setToggle(`${id}_cintos`, `${id}_cintos_out`);
+    setToggle(`${id}_pneus`, `${id}_pneus_out`);
+    setToggle(`${id}_seg`, `${id}_seguradora`);
+    setToggle(`${id}_empresa`, null, '.empresaDados');
+    setToggle(`${id}_danos`, `${id}_danos_rel`);
+    setToggle(`${id}_pp`, null, '.prodDados');
+
+    // Exclusividade por faixa (checkboxes agem como "radio")
+    (() => {
+      const faixaCbs = wrap.querySelectorAll(`input[name="${id}_faixa"]`);
+      faixaCbs.forEach(cb => cb.addEventListener('change', () => {
+        if (cb.checked) faixaCbs.forEach(o => { if (o !== cb) o.checked = false; });
+      }));
+    })();
+  }
+}
+
+numVeic.addEventListener('change', ()=>{
+  let n = parseInt(numVeic.value)||1;
+  if(n<1) n=1;
+  if(n>40 && !confirm('Número grande de veículos. Continuar?')){ numVeic.value=40; n=40; }
+  buildVehicles(n);
+});
+buildVehicles(parseInt(numVeic.value || 1));
+
+/* ---------- photos ---------- */
+$('#btnAddPhotos').addEventListener('click', ()=> $('#photos').click());
+$('#photos').addEventListener('change', (e)=>{
+  const files = Array.from(e.target.files || []);
+  $('#status').textContent = `${files.length} foto(s) selecionada(s)`;
+});
+
+/* ---------- printable HTML builder ---------- */
+async function buildPrintableHTML() {
+  const escapeHtml = (str) =>
+    String(str || '')
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  const data = {
+    ev: (document.getElementById('ev')?.value || '').trim(),
+    data: document.getElementById('data')?.value || '',
+    hora: document.getElementById('time')?.value || '',
+    tipo: document.getElementById('tipo')?.value || '',
+    responsavel: document.getElementById('responsavel')?.value || '',
+    prefixo: document.getElementById('prefixoViatura')?.value || '',
+    prefixo_pmr_no_local: (document.getElementById('prefixoPMR')?.value || '').trim(),
+    rodovia: (document.getElementById('rodovia')?.value || '').trim(),
+    km: (document.getElementById('km')?.value || '').trim(),
+    sentido: Array.from(document.querySelectorAll('#sentido input:checked')).map(i => i.value).join(' • '),
+    pista:   Array.from(document.querySelectorAll('#pista input:checked')).map(i => i.value).join(' • '),
+    tracado: (() => {
+      const checked = Array.from(document.querySelectorAll('#tracado input:checked')).map(i => i.value);
+      const outrosEl  = document.getElementById('tracado_outros_txt');
+      const outrosVal = outrosEl ? (outrosEl.value || '').trim() : '';
+      let out = checked.join(' • ');
+      if (checked.includes('OUTROS') && outrosVal) {
+        out = out.replace('OUTROS', `OUTROS — ${outrosVal}`);
+      }
+      return out;
+    })(),
+    condicoes: (document.getElementById('condicoes_outras')?.value || '').trim() 
+               || Array.from(document.querySelectorAll('#condgroup input:checked')).map(i => i.value).join(' • '),
+    dinamica: (document.getElementById('dinamica')?.value || '').trim(),
+    observacoes: (document.getElementById('observacoes')?.value || '').trim(),
+    vehicles: []
+  };
+
+  // --- coleta dos veículos ---
+  const vdivs = Array.from(document.getElementById('veiculosArea')?.querySelectorAll('.vehicle') || []);
+  for (const v of vdivs) {
+    const id = v.dataset.id || (v.querySelector('h3')?.textContent.split(' ')[0] || 'V?');
+    const get = name => {
+      const el = v.querySelector(`[name="${name}"]`);
+      return el ? (el.value || '').trim() : '';
+    };
+    const pick = name => Array.from(v.querySelectorAll(`[name="${name}"]`)).find(x => x.checked)?.value || '';
+
+  const faixa = Array.from(v.querySelectorAll(`[name="${id}_faixa"]:checked`)).map(i => i.value).join(' • ');
+    const emp_flag   = pick(`${id}_empresa`);
+    const danos_flag = pick(`${id}_danos`);
+    const pp_flag    = pick(`${id}_pp`);
+
+    data.vehicles.push({
+      id,
+      tipo: get(`${id}_tipo`),
+      marca: get(`${id}_marca`),
+      modelo: get(`${id}_modelo`),
+      placas: get(`${id}_placas`),
+      faixa,
+      ocup: get(`${id}_ocup`),
+      cintos: pick(`${id}_cintos`),
+      cintos_out: get(`${id}_cintos_out`),
+      pneus: pick(`${id}_pneus`),
+      pneus_out: get(`${id}_pneus_out`),
+      seg: pick(`${id}_seg`),
+      seguradora: get(`${id}_seguradora`),
+      empresa: emp_flag === 'SIM' ? {
+        id: get(`${id}_emp_id`),
+        nome: get(`${id}_emp_nome`),
+        tel: get(`${id}_emp_tel`),
+        end: get(`${id}_emp_end`)
+      } : null,
+      condutor: {
+        nome: get(`${id}_cond_nome`),
+        cpf: get(`${id}_cond_cpf`),
+        rg: get(`${id}_cond_rg`),
+        tel: get(`${id}_cond_tel`),
+        end: get(`${id}_cond_end`)
+      },
+      danos_flag,
+      danos_rel: get(`${id}_danos_rel`),
+      pp_flag,
+      pp: pp_flag === 'SIM' ? {
+        tipo: get(`${id}_pp_tipo`),
+        onu: get(`${id}_pp_onu`),
+        rot: get(`${id}_pp_rot`),
+        resp: get(`${id}_pp_resp`),
+        origem: get(`${id}_pp_origem`),
+        destino: get(`${id}_pp_destino`),
+        outs: get(`${id}_pp_out`)
+      } : null,
+      photos: [] // (se quiser futuramente levar fotos por veículo, preenche aqui)
+    });
+  }
+
+  // --- fotos do local/cena (opcional) ---
+  const sceneInput = document.getElementById('scene_photos');
+  const sceneFiles = Array.from(sceneInput?.files || []).slice(0, 50);
+  const scenePhotos = await Promise.all(sceneFiles.map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.readAsDataURL(f);
+  })));
+
+  // --- MONTA O HTML ---
+  let html = `<!doctype html><html><head><meta charset="utf-8"><title>Checklist de Acidentes</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;padding:12px;color:#000}
+      h1{color:#4b2fb0;font-weight:800;text-align:center;margin:0 0 20px}
+      h2{font-weight:700;margin:16px 0 8px;color:#4b2fb0}
+      h3{font-weight:700;margin:12px 0 6px;color:#555}
+      p{margin:6px 0}
+      .section{margin-bottom:12px;border-bottom:1px solid #ccc;padding-bottom:8px}
+      img{max-width:48%;margin:4px;border:1px solid #ddd}
+    </style></head><body>`;
+
+  html += `<h1>ACIDENTE</h1>`;
+  html += `<div class="section">
+    <p><strong>EV N°:</strong> ${escapeHtml(data.ev)}</p>
+    <p><strong>DATA:</strong> ${escapeHtml(data.data)}</p>
+    <p><strong>HORA:</strong> ${escapeHtml(data.hora)}</p>
+    <p><strong>TIPO DE ACIDENTE:</strong> ${escapeHtml(data.tipo)}</p>
+    <p><strong>RESPONSÁVEL:</strong> ${escapeHtml(data.responsavel)}</p>
+   
+    <p><strong>PREFIXO DA VIATURA:</strong> ${escapeHtml(data.prefixo)}</p>
+     ${data.prefixo_pmr_no_local ? `<p><strong>PREFIXO PMR NO LOCAL:</strong> ${escapeHtml(data.prefixo_pmr_no_local)}</p>` : ''}
+    <p><strong>RODOVIA:</strong> ${escapeHtml(data.rodovia)}</p>
+    <p><strong>KM:</strong> ${escapeHtml(data.km)}</p>
+    <p><strong>SENTIDO:</strong> ${escapeHtml(data.sentido)}</p>
+    <p><strong>PISTA:</strong> ${escapeHtml(data.pista)}</p>
+    <p><strong>TRAÇADO:</strong> ${escapeHtml(data.tracado)}</p>
+    <p><strong>CONDIÇÕES ADVERSAS:</strong> ${escapeHtml(data.condicoes)}</p>
+  </div>`;
+
+  // --- seção de veículos ---
+  data.vehicles.forEach(v => {
+    html += `<div class="section"><h2>${escapeHtml(v.id)} — DADOS DO VEÍCULO</h2>
+      <p><strong>MARCA:</strong> ${escapeHtml(v.marca)}</p>
+      <p><strong>MODELO:</strong> ${escapeHtml(v.modelo)}</p>
+      <p><strong>PLACAS:</strong> ${escapeHtml(v.placas)}</p>
+      <p><strong>TIPO:</strong> ${escapeHtml(v.tipo)}</p>
+      <p><strong>FAIXA QUE TRAFEGAVA:</strong> ${escapeHtml(v.faixa)}</p>
+      <p><strong>CINTOS:</strong> ${escapeHtml(v.cintos)}${v.cintos_out ? ' — ' + escapeHtml(v.cintos_out) : ''}</p>
+      <p><strong>PNEUS:</strong> ${escapeHtml(v.pneus)}${v.pneus_out ? ' — ' + escapeHtml(v.pneus_out) : ''}</p>
+      <p><strong>Nº DE OCUPANTES:</strong> ${escapeHtml(v.ocup)}</p>
+      <p><strong>TEM SEGURO:</strong> ${escapeHtml(v.seg)}</p>
+      ${v.seguradora ? `<p><strong>NOME DA SEGURADORA:</strong> ${escapeHtml(v.seguradora)}</p>` : ''}`;
+
+    if (v.empresa) {
+      html += `<h3>DADOS DA EMPRESA / TERCEIRO</h3>
+        <p><strong>CPF/CNPJ/RG:</strong> ${escapeHtml(v.empresa.id)}</p>
+        <p><strong>NOME:</strong> ${escapeHtml(v.empresa.nome)}</p>
+        <p><strong>TEL:</strong> ${escapeHtml(v.empresa.tel)}</p>
+        <p><strong>ENDEREÇO:</strong> ${escapeHtml(v.empresa.end)}</p>`;
+    }
+
+    const c = v.condutor;
+    html += `<h3>CONDUTOR</h3>
+      <p><strong>NOME:</strong> ${escapeHtml(c.nome)}</p>
+      <p><strong>CPF:</strong> ${escapeHtml(c.cpf)}</p>
+      <p><strong>RG:</strong> ${escapeHtml(c.rg)}</p>
+      <p><strong>TEL:</strong> ${escapeHtml(c.tel)}</p>
+      <p><strong>ENDEREÇO:</strong> ${escapeHtml(c.end)}</p>`;
+
+    if (v.danos_flag === 'SIM') {
+      html += `<h3>RELATE OS DANOS</h3><p>${escapeHtml(v.danos_rel)}</p>`;
+    }
+    if (v.pp_flag === 'SIM' && v.pp) {
+      html += `<h3>PP</h3>
+        <p><strong>TIPO:</strong> ${escapeHtml(v.pp.tipo)}</p>
+        <p><strong>ONU:</strong> ${escapeHtml(v.pp.onu)}</p>
+        <p><strong>RÓTULO:</strong> ${escapeHtml(v.pp.rot)}</p>
+        <p><strong>RESPONSÁVEL:</strong> ${escapeHtml(v.pp.resp)}</p>
+        <p><strong>ORIGEM:</strong> ${escapeHtml(v.pp.origem)}</p>
+        <p><strong>DESTINO:</strong> ${escapeHtml(v.pp.destino)}</p>
+        <p><strong>OUTROS:</strong> ${escapeHtml(v.pp.outs)}</p>`;
+    }
+
+    if (v.photos && v.photos.length) {
+      html += '<h3>FOTOS DO VEÍCULO</h3>';
+      v.photos.forEach(p => html += `<img src="${p}">`);
+    }
+
+    html += `</div>`;
+  });
+
+  // --- demais seções ---
+  if (data.dinamica)    html += `<h2>DINÂMICA</h2><p>${escapeHtml(data.dinamica)}</p>`;
+  if (data.observacoes) html += `<h2>OBSERVAÇÕES</h2><p>${escapeHtml(data.observacoes)}</p>`;
+ 
+
+
+  if (scenePhotos && scenePhotos.length) {
+    html += '<h2>FOTOS DO LOCAL/CENA DO ACIDENTE</h2>';
+    scenePhotos.forEach(p => html += `<img src="${p}">`);
+  }
+
+  html += '</body></html>';
+  return html;
+}
+
+/* >>> INÍCIO: utils & validações (cole após buildPrintableHTML) */
+
+// slug para nome de arquivo seguro
+function slug(s){
+  return String(s || '')
+    .normalize('NFD')                   // remove acentos
+    .replace(/[\u0300-\u036f]/g, '')    // remove marcas diacríticas
+    .replace(/[^\w\-]+/g, '_')          // troca caracteres inválidos por _
+    .replace(/_+/g, '_')                // evita múltiplos ___
+    .slice(0, 40)                       // limita tamanho
+    || 'ACIDENTE';
+}
+
+// valida campos essenciais do cabeçalho
+function validaCamposBasicos(){
+  const campos = [
+    ['#ev',           'EV'],
+    ['#data',         'Data'],
+    ['#time',         'Hora'],
+    ['#tipo',         'Tipo de acidente'],
+    ['#responsavel',  'Responsável'],
+    ['#rodovia',      'Rodovia']
+  ];
+  for (const [sel, label] of campos){
+    const el = document.querySelector(sel);
+    const val = String(el?.value || '').trim();
+    if (!val) {
+      showToast(`Preencha: ${label}`);
+      if (el && typeof el.focus === 'function') {
+        el.focus();
+        try { el.scrollIntoView({behavior:'smooth', block:'center'}); } catch(_) {}
+        try { el.reportValidity?.(); } catch(_) {}
+      }
+      return false;
+    }
+  }
+  return true;
+}
+
+// valida faixa marcada em cada veículo
+function validaFaixasObrigatorias(){
+  const vehicles = Array.from(document.querySelectorAll('.vehicle'));
+  for(const v of vehicles){
+    const id = v.dataset.id;
+    const faixaMarcada = v.querySelector(`input[name="${id}_faixa"]:checked`);
+    if(!faixaMarcada){
+      showToast(`Selecione a FAIXA no veículo ${id}.`);
+      return false;
+    }
+  }
+  return true;
+}
+/* >>> FIM: utils & validações */
+/* ---------- buttons (atualizados: valida básicos + faixas) ---------- */
+$('#btnPdf').addEventListener('click', async ()=>{
+  if(!validaCamposBasicos() || !validaFaixasObrigatorias()) return;
+
+  try{
+    // ✅ garante que o último campo de texto (ex.: prefixoPMR) seja “commitado”
+    document.getElementById('prefixoPMR')?.blur();
+    await new Promise(r => setTimeout(r, 0));
+
+    const printable = await buildPrintableHTML();
+    const blob = new Blob([printable], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+
+    const evSafe = slug($('#ev')?.value);
+    const fname  = `ACIDENTE_${evSafe || 'EV'}_${new Date().toISOString().slice(0,10)}.html`;
+
+    const w = window.open(url, '_blank');
+    if (w) {
+      w.onload = ()=>{ try{ w.focus(); w.print(); } catch(_){} };
+    } else {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fname;
+      a.click();
+      URL.revokeObjectURL(url);
+      alert('Não foi possível abrir nova janela — arquivo HTML gerado para download.');
+    }
+  } catch(err){
+    alert('Erro: ' + (err?.message || err));
+  }
+});
+$('#btnShare').addEventListener('click', async ()=>{
+  if(!validaCamposBasicos() || !validaFaixasObrigatorias()) return;
+  try{
+    const printable = await buildPrintableHTML();
+    const blob = new Blob([printable], {type:'text/html'});
+
+    const evSafe = slug($('#ev')?.value);
+    const fname  = `ACIDENTE_${evSafe || 'EV'}_${new Date().toISOString().slice(0,10)}.html`;
+
+    const file = new File([blob], fname, {type:'text/html'});
+
+    if (navigator.canShare && navigator.canShare({files:[file]})) {
+      await navigator.share({ title:'Checklist de Acidente', files:[file] });
+    } else if (navigator.share) {
+      const url = URL.createObjectURL(blob);
+      await navigator.share({ title:'Checklist de Acidente', text:'Checklist preenchido.', url });
+      URL.revokeObjectURL(url);
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fname;
+      a.click();
+      URL.revokeObjectURL(url);
+      alert('Compartilhamento nativo não disponível — arquivo HTML gerado para download.');
+    }
+  } catch(err){
+    alert('Erro ao compartilhar: ' + (err?.message || err));
+  }
+});
+
+/* ---------- small UX helpers ---------- */
+document.addEventListener('blur', (e)=>{
+  if(e.target.tagName==='INPUT' && e.target.type==='text'){
+    // (mantido vazio conforme seu ajuste)
+  }
+}, true);
+
+// >>> INÍCIO ALTERAÇÃO: init no DOM pronto (evita falha do SENTIDO)
+function init(){
+  setupConflicts();
+}
+document.addEventListener('DOMContentLoaded', init);
+// >>> FIM ALTERAÇÃO: init
+
+
+
+/* === SALVAR AUTOMATICAMENTE OS DADOS (multi-valor) === */
+function salvarFormulario() {
+  const form = document.querySelector('form');
+  const fd = new FormData(form);
+  const store = {};
+
+  // agrega múltiplos valores por "name"
+  for (const [k, v] of fd.entries()) {
+    if (store[k] === undefined) {
+      store[k] = v;
+    } else if (Array.isArray(store[k])) {
+      store[k].push(v);
+    } else {
+      store[k] = [store[k], v];
+    }
+  }
+
+  // guarda também a contagem de veículos (se existir)
+  const num = document.getElementById('numVeiculos');
+  if (num) store.__numVeiculos = parseInt(num.value || '1', 10);
+
+  localStorage.setItem('formAcidente', JSON.stringify(store));
+}
+
+/* === RESTAURAR DADOS SALVOS (inclui veículos e checkboxes) === */
+function restaurarFormulario() {
+  const salvo = localStorage.getItem('formAcidente');
+  if (!salvo) return;
+
+  const data = JSON.parse(salvo);
+  const form = document.querySelector('form');
+
+  // 1) Restaura número de veículos antes de aplicar campos
+  const num = document.getElementById('numVeiculos');
+  if (num && data.__numVeiculos) {
+    num.value = data.__numVeiculos;
+    if (typeof buildVehicles === 'function') {
+      buildVehicles(parseInt(num.value || '1', 10));
+    }
+  }
+
+  // 2) Aplica valores por "name"
+  Object.keys(data).forEach(name => {
+    if (name === '__numVeiculos') return; // meta
+
+    const value = data[name];
+    const nodes = form.querySelectorAll(`[name="${name}"]`);
+    if (!nodes.length) return;
+
+    if (nodes.length > 1) {
+      const values = Array.isArray(value) ? value : [value];
+      nodes.forEach(node => {
+        if (node.type === 'checkbox' || node.type === 'radio') {
+          node.checked = values.includes(node.value);
+        } else {
+          node.value = values[0] ?? '';
+        }
+      });
+    } else {
+      const el = nodes[0];
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        const values = Array.isArray(value) ? value : [value];
+        el.checked = values.includes(el.value);
+      } else {
+        el.value = Array.isArray(value) ? value[0] : value;
+      }
+    }
+  });
+}
+
+/* === EVENTOS DE PERSISTÊNCIA === */
+document.addEventListener('DOMContentLoaded', () => {
+  restaurarFormulario();
+  const form = document.querySelector('form');
+  if (form) form.addEventListener('input', salvarFormulario);
+});
+
+// === LIMPAR OS DADOS ===
+function limparDados() {
+  if (confirm('Tem certeza que deseja limpar todos os dados do formulário?')) {
+    localStorage.removeItem('formAcidente');
+    document.querySelector('form').reset();
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toastMessage');
+  t.textContent = msg;
+  t.classList.add('show');
+
+  setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+// === EVENTOS ===
+document.addEventListener('DOMContentLoaded', () => {
+  restaurarFormulario();
+  const form = document.querySelector('form');
+  if (form) form.addEventListener('input', salvarFormulario);
+});
+</script>
+<script>
+(function(){
+  const $ = (s)=>document.querySelector(s);
+
+  function applySavedModes(){
+    const modes = JSON.parse(localStorage.getItem('rodovia_modes') || '{}');
+    document.body.classList.toggle('mode-rodovia',   !!modes.rodovia);
+    document.body.classList.toggle('mode-contraste', !!modes.contraste);
+    document.body.classList.toggle('mode-noturno',   !!modes.noturno);
+
+    const t1 = $('#modeRodoviaToggle');
+    const t2 = $('#modeContrasteToggle');
+    const t3 = $('#modeNoturnoToggle');
+    if(t1) t1.checked = !!modes.rodovia;
+    if(t2) t2.checked = !!modes.contraste;
+    if(t3) t3.checked = !!modes.noturno;
+  }
+
+  function saveModes(){
+    const modes = {
+      rodovia:   !!document.body.classList.contains('mode-rodovia'),
+      contraste: !!document.body.classList.contains('mode-contraste'),
+      noturno:   !!document.body.classList.contains('mode-noturno'),
+    };
+    localStorage.setItem('rodovia_modes', JSON.stringify(modes));
+  }
+
+  function wireToggles(){
+    const t1 = $('#modeRodoviaToggle');
+    const t2 = $('#modeContrasteToggle');
+    const t3 = $('#modeNoturnoToggle');
+
+    if(t1) t1.addEventListener('change', ()=>{
+      document.body.classList.toggle('mode-rodovia', t1.checked);
+      saveModes();
+    });
+    if(t2) t2.addEventListener('change', ()=>{
+      document.body.classList.toggle('mode-contraste', t2.checked);
+      saveModes();
+    });
+    if(t3) t3.addEventListener('change', ()=>{
+      document.body.classList.toggle('mode-noturno', t3.checked);
+      saveModes();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    applySavedModes();
+    wireToggles();
+  });
+})();
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+    });
+  }
+</script>
+
+</body>
+</html>
