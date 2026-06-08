@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>CHECKLIST DE ACIDENTES</title>
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7B68EE">
 
@@ -45,7 +44,10 @@
   .checkbox-group label:hover { box-shadow: 0 4px 10px rgba(20,20,50,0.06); }
   .checkbox-group input[type="checkbox"]{ accent-color: var(--accent); }
   .checkbox-group label:has(input[type="checkbox"]:checked){ border-color: rgba(123,104,238,0.55); box-shadow: 0 6px 14px rgba(123,104,238,0.10); }
-  .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  
+  /* Botões fixados no fim do formulário - Sem flutuação */
+  .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; padding: 10px 0; }
+  
   .btn { background:var(--accent); color:#fff; padding:10px 16px; border-radius:12px; border:none; font-weight:800; letter-spacing:.3px; box-shadow: 0 6px 14px rgba(123,104,238,0.16); transition: transform .05s ease, box-shadow .15s ease, filter .1s ease; cursor:pointer; }
   .btn:hover { filter: brightness(1.03); box-shadow:0 8px 18px rgba(123,104,238,0.22); }
   .btn:active { transform: translateY(1px); }
@@ -55,7 +57,7 @@
   .thumbWrap{ display:flex; flex-direction:column; align-items:center; width:120px; border:1px solid #e5e5ff; padding:6px; border-radius:6px; background:#fff; }
   .thumbWrap .photo{ max-width:100%; max-height:90px; object-fit:contain; display:block; margin-bottom:6px; border-radius:6px; }
   .removePhotoBtn{ background:#F44336; color:white; border:none; padding:4px 6px; border-radius:4px; cursor:pointer; font-size:12px; }
-  footer{ margin-top:12px; text-align:center; color:#444; font-size:13px; }
+  footer{ margin-top:20px; text-align:center; color:#444; font-size:13px; }
   .hidden{ display:none !important; }
   #toastMessage { position: fixed; top: 20px; right: 20px; background: #7B68EE; color: #fff; padding: 12px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity .4s ease, transform .4s ease; transform: translateY(-15px); z-index: 9999; font-weight: bold; font-size: 15px; }
   #toastMessage.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
@@ -64,19 +66,36 @@
   .fieldset-contrast > legend { padding: 0 8px; font-weight: 800; color: var(--accent); font-size: 14px; letter-spacing: .2px; }
   
   @media (max-width:900px){ .form-grid{ grid-template-columns: repeat(6, 1fr); } .col-6{ grid-column: span 6; } .col-4{ grid-column: span 6; } .col-3{ grid-column: span 3; } .col-8{ grid-column: span 6; } }
-  @media (max-width:520px){ .form-grid{ grid-template-columns: 1fr; gap:12px; } .col-3, .col-4, .col-6, .col-8, .col-12{ grid-column: 1 / -1; } .inline-row{ flex-direction:column; align-items:stretch; } #tracado { display:grid; grid-template-columns:1fr !important; gap:8px !important; } .card { padding:14px; } .card h2 { font-size:15px; margin-bottom:6px; } label { font-size:12.5px; margin-bottom:4px; } input, select, textarea { padding:11px 12px; font-size:15px; border-radius:10px; } .btn { width:100%; padding:12px; border-radius:12px; font-size:16px; } .actions { position: sticky; bottom: 8px; background: transparent; z-index: 20; gap:8px; } .photosPreview{ gap: 10px !important; } .thumbWrap{ width: calc(50% - 10px) !important; } .thumbWrap .photo{ max-height: 120px !important; } .title{ font-size: 18px !important; } }
+  @media (max-width:520px){ 
+    .form-grid{ grid-template-columns: 1fr; gap:12px; } 
+    .col-3, .col-4, .col-6, .col-8, .col-12{ grid-column: 1 / -1; } 
+    .inline-row{ flex-direction:column; align-items:stretch; } 
+    #tracado { display:grid; grid-template-columns:1fr !important; gap:8px !important; } 
+    .card { padding:14px; } 
+    .card h2 { font-size:15px; margin-bottom:6px; } 
+    label { font-size:12.5px; margin-bottom:4px; } 
+    input, select, textarea { padding:11px 12px; font-size:15px; border-radius:10px; } 
+    .btn { width:100%; padding:12px; border-radius:12px; font-size:16px; } 
+    /* Removido o posicionamento sticky no mobile */
+    .actions { gap:8px; } 
+    .photosPreview{ gap: 10px !important; } 
+    .thumbWrap{ width: calc(50% - 10px) !important; } 
+    .thumbWrap .photo{ max-height: 120px !important; } 
+    .title{ font-size: 18px !important; } 
+  }
 
   /* MODO RODOVIA / ALTO CONTRASTE / NOTURNO */
   .toggle-chip{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid #E9E7FF; border-radius:999px; background:#fff; cursor:pointer; user-select:none; }
   .toggle-chip input{ accent-color: var(--accent); }
 
-  body.mode-rodovia{ --scale: 1.12; --touch: 44px; padding-bottom: 86px; }
+  body.mode-rodovia{ --scale: 1.12; --touch: 44px; }
   body.mode-rodovia .card{ padding: 16px; }
   body.mode-rodovia label{ font-size: calc(13px * var(--scale)); }
   body.mode-rodovia input, body.mode-rodovia select, body.mode-rodovia textarea{ padding: 14px 14px; font-size: calc(15px * var(--scale)); border-radius: 12px; min-height: var(--touch); }
   body.mode-rodovia .checkbox-group label{ padding: 12px 14px; font-size: calc(14px * var(--scale)); min-height: var(--touch); }
   body.mode-rodovia .btn{ padding: 14px 18px; font-size: calc(16px * var(--scale)); border-radius: 14px; min-height: var(--touch); }
-  body.mode-rodovia .actions{ position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; padding: 10px 14px; background: linear-gradient(180deg, rgba(247,246,255,0) 0%, rgba(247,246,255,0.85) 20%, rgba(247,246,255,0.95) 100%); backdrop-filter: saturate(120%) blur(6px); border-top: 1px solid rgba(0,0,0,0.06); display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+  /* Removido o posicionamento fixed do modo rodovia para evitar botões flutuantes */
+  body.mode-rodovia .actions{ display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   body.mode-rodovia .actions .btn{ flex: 1 0 180px; }
 
   body.mode-contraste{ --bg: #ffffff; --card: #ffffff; --accent: #000000; --text: #000000; --muted: #222; }
@@ -109,7 +128,6 @@
       <div class="title">CHECKLIST DE ACIDENTES</div>
     </header>
 
-    <!-- CONTROLES ADAPTATIVOS -->
     <div class="card toggle-container" style="margin-bottom:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
       <strong>Modo de Exibição:</strong>
       <label class="toggle-chip"><input type="checkbox" id="modeRodoviaToggle"> <span>Ultra-compacto</span></label>
@@ -117,11 +135,9 @@
       <label class="toggle-chip"><input type="checkbox" id="modeNoturnoToggle"> <span>Noturno</span></label>
     </div>
 
-    <!-- FORMULÁRIO -->
     <form id="form" class="card" onsubmit="return false">
       <div class="form-grid">
 
-        <!-- Informações Gerais -->
         <section class="card col-6">
           <h2>Informações Gerais</h2>
           <label>EV N° <span class="muted">*</span></label>
@@ -139,7 +155,6 @@
           </div>
         </section>
 
-        <!-- Detalhes Operacionais -->
         <section class="card col-6">
           <h2>Detalhes</h2>
           <div style="width:100%; margin-bottom:8px;">
@@ -165,7 +180,6 @@
           </div>
         </section>
 
-        <!-- Localização -->
         <section class="card col-12">
           <fieldset class="fieldset-contrast" aria-labelledby="legend-localizacao">
             <legend id="legend-localizacao">LOCALIZAÇÃO</legend>
@@ -200,7 +214,6 @@
           </fieldset>
         </section>
 
-        <!-- Traçado da Via -->
         <section class="card col-12">
           <fieldset class="fieldset-contrast" aria-labelledby="legend-tracado">
             <legend id="legend-tracado">TRAÇADO DA VIA</legend>
@@ -225,7 +238,6 @@
           </fieldset>
         </section>
 
-        <!-- Condições Adversas -->
         <section class="card col-12">
           <h2>CONDIÇÕES ADVERSAS</h2>
           <div class="checkbox-group" id="condgroup">
@@ -241,7 +253,6 @@
         </section>
       </div>
 
-      <!-- Veículos -->
       <section class="card" style="margin-top:14px;">
         <h2>VEÍCULOS</h2>
         <div class="form-group">
@@ -251,7 +262,6 @@
         <div id="veiculosArea"></div>
       </section>
 
-      <!-- Dinâmica -->
       <section class="card" style="margin-top:14px;">
         <h2>DINÂMICA</h2>
         <div class="form-group">
@@ -260,7 +270,6 @@
         </div>
       </section>
 
-      <!-- Prefixo PMR -->
       <section class="card" style="margin-top:14px;">
         <h2>PREFIXO PMR NO LOCAL</h2>
         <div class="form-group">
@@ -268,7 +277,6 @@
         </div>
       </section>
 
-      <!-- Observações -->
       <section class="card" style="margin-top:14px;">
         <h2>OBSERVAÇÕES</h2>
         <div class="form-group">
@@ -276,7 +284,6 @@
         </div>
       </section>
 
-      <!-- Ações -->
       <div class="actions">
         <button type="button" class="btn" id="btnPdf">Gerar PDF</button>
         <button type="button" class="btn btn-ghost" id="btnShare">Compartilhar</button>
@@ -613,7 +620,6 @@ async function buildPrintableHTML() {
     const danos_flag = pick(`${id}_danos`);
     const pp_flag    = pick(`${id}_pp`);
 
-    // Captura as strings Base64 das fotos anexadas ao veículo específico
     const photoElements = Array.from(v.querySelectorAll('.photosPreview img'));
     const vehiclePhotos = photoElements.map(img => img.src);
 
