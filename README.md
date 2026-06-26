@@ -1,11 +1,5 @@
 # 🚗 Checklist de Acidentes
 
-![Versão](https://img.shields.io/badge/Versão-1.0.0-blue)
-![PWA](https://img.shields.io/badge/PWA-Offline-success)
-![HTML5](https://img.shields.io/badge/HTML5-orange)
-![JavaScript](https://img.shields.io/badge/JavaScript-yellow)
-![Licença](https://img.shields.io/badge/Licença-Personalizada-red)
-
 Sistema desenvolvido para auxiliar equipes operacionais no registro de acidentes em rodovias.
 
 O projeto foi desenvolvido em **HTML5**, **CSS3** e **JavaScript**, utilizando a tecnologia **Progressive Web App (PWA)**, permitindo instalação como aplicativo e funcionamento totalmente offline.
