@@ -141,11 +141,3 @@ Caso encontre algum problema ou tenha ideias para melhorias, fique à vontade pa
 Este software foi desenvolvido para auxiliar o registro de informações operacionais.
 
 A utilização do sistema não substitui os procedimentos internos, normas ou legislações aplicáveis às organizações responsáveis pelo atendimento das ocorrências.
-
----
-
-## ⚜️ Sempre Alerta!
-
-> "Servir é transformar conhecimento em benefício das pessoas."
-
-**Um Grande SERVIR!** 🙋⚜️
