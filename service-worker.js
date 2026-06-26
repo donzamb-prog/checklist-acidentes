@@ -1,3 +1,17 @@
+/*
+=========================================================
+Checklist de Acidentes
+Copyright (c) 2026 Donizete Zambeli
+
+Licenciado conforme os termos do arquivo LICENSE.
+
+Repositório oficial:
+https://donzamb-prog.github.io/checklist-acidentes/
+
+Desenvolvido por Donizete Zambeli
+Projeto Checklist de Acidentes
+=========================================================*/
+
 const CACHE_NAME = 'pioneiro-pv-v2'; // Mudamos de v1 para v2 para forçar a atualização nos aparelhos!
 
 const ASSETS = [
