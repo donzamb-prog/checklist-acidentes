@@ -1,0 +1,926 @@
+<!doctype html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>CHECKLIST DE ACIDENTES</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7B68EE">
+
+<style>
+  :root{
+    --bg: #E6E6FA;
+    --card: #F8F8FF;
+    --accent: #7B68EE;
+    --text: #0b1330;
+    --muted: #6b6b6b;
+    --radius: 10px;
+    --gap: 14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #F7F6FF 0%, var(--bg) 100%);
+    color:var(--text);
+    padding:18px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container{ max-width:1100px; margin:0 auto; padding:20px; }
+  .header{ text-align:center; margin-bottom:18px; }
+  .title{ font-size:20px; color:var(--accent); font-weight:800; letter-spacing:0.6px; }
+  .form-grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items:start; }
+  .card { grid-column: 1 / -1; background: var(--card); padding:18px; border-radius: var(--radius); border: 1px solid rgba(123,104,238,0.08); box-shadow: 0 6px 18px rgba(20,20,50,0.04); }
+  .col-6 { grid-column: span 6; } .col-4 { grid-column: span 4; } .col-3 { grid-column: span 3; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
+  .card h2{ margin:0 0 8px; color:var(--accent); font-size:16px; }
+  label{ display:block; font-size:13px; margin-bottom:6px; color:var(--text); font-weight:600; }
+  input[type=text], input[type=number], input[type=date], input[type=time], select, textarea{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid #E9E7FF; background:#fff; font-size:14px; color:var(--text); }
+  textarea{ min-height:80px; resize:vertical; }
+  .inline-row{ display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+  .checkbox-group{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+  .checkbox-group label{ font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E9E7FF; border-radius:8px; padding:7px 10px; transition: box-shadow .15s ease, transform .05s ease, border-color .15s ease; }
+  .checkbox-group label:hover { box-shadow: 0 4px 10px rgba(20,20,50,0.06); }
+  .checkbox-group input[type="checkbox"]{ accent-color: var(--accent); }
+  .checkbox-group label:has(input[type="checkbox"]:checked){ border-color: rgba(123,104,238,0.55); box-shadow: 0 6px 14px rgba(123,104,238,0.10); }
+  
+  .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; padding: 10px 0; }
+  
+  .btn { background:var(--accent); color:#fff; padding:10px 16px; border-radius:12px; border:none; font-weight:800; letter-spacing:.3px; box-shadow: 0 6px 14px rgba(123,104,238,0.16); transition: transform .05s ease, box-shadow .15s ease, filter .1s ease; cursor:pointer; }
+  .btn:hover { filter: brightness(1.03); box-shadow:0 8px 18px rgba(123,104,238,0.22); }
+  .btn:active { transform: translateY(1px); }
+  .btn-ghost { background:transparent; border:1px solid var(--accent); color:var(--accent); }
+  .muted{ color:var(--muted); font-size:13px; }
+  .photosPreview{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .thumbWrap{ display:flex; flex-direction:column; align-items:center; width:120px; border:1px solid #e5e5ff; padding:6px; border-radius:6px; background:#fff; }
+  .thumbWrap .photo{ max-width:100%; max-height:90px; object-fit:contain; display:block; margin-bottom:6px; border-radius:6px; }
+  .removePhotoBtn{ background:#F44336; color:white; border:none; padding:4px 6px; border-radius:4px; cursor:pointer; font-size:12px; }
+  footer{ margin-top:20px; text-align:center; color:#444; font-size:13px; }
+  .hidden{ display:none !important; }
+  #toastMessage { position: fixed; top: 20px; right: 20px; background: #7B68EE; color: #fff; padding: 12px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); opacity: 0; pointer-events: none; transition: opacity .4s ease, transform .4s ease; transform: translateY(-15px); z-index: 9999; font-weight: bold; font-size: 15px; }
+  #toastMessage.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  *:focus{ outline: 3px solid #7B68EE !important; outline-offset: 3px; box-shadow: 0 0 0 4px rgba(123,104,238,0.35); border-radius: 6px; }
+  .fieldset-contrast { border: 1px solid rgba(123,104,238,0.25); border-radius: 10px; padding: 12px 12px 10px; background: linear-gradient(180deg, #ffffff 0%, #F8F8FF 100%); margin: 0; }
+  .fieldset-contrast > legend { padding: 0 8px; font-weight: 800; color: var(--accent); font-size: 14px; letter-spacing: .2px; }
+  
+  @media (max-width:900px){ .form-grid{ grid-template-columns: repeat(6, 1fr); } .col-6{ grid-column: span 6; } .col-4{ grid-column: span 6; } .col-3{ grid-column: span 3; } .col-8{ grid-column: span 6; } }
+  @media (max-width:520px){ 
+    .form-grid{ grid-template-columns: 1fr; gap:12px; } 
+    .col-3, .col-4, .col-6, .col-8, .col-12{ grid-column: 1 / -1; } 
+    .inline-row{ flex-direction:column; align-items:stretch; } 
+    #tracado { display:grid; grid-template-columns:1fr !important; gap:8px !important; } 
+    .card { padding:14px; } 
+    .card h2 { font-size:15px; margin-bottom:6px; } 
+    label { font-size:12.5px; margin-bottom:4px; } 
+    input, select, textarea { padding:11px 12px; font-size:15px; border-radius:10px; } 
+    .btn { width:100%; padding:12px; border-radius:12px; font-size:16px; } 
+    .actions { gap:8px; } 
+    .photosPreview{ gap: 10px !important; } 
+    .thumbWrap{ width: calc(50% - 10px) !important; } 
+    .thumbWrap .photo{ max-height: 120px !important; } 
+    .title{ font-size: 18px !important; } 
+  }
+
+  .toggle-chip{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid #E9E7FF; border-radius:999px; background:#fff; cursor:pointer; user-select:none; }
+  .toggle-chip input{ accent-color: var(--accent); }
+
+  body.mode-rodovia{ --scale: 1.12; --touch: 44px; }
+  body.mode-rodovia .card{ padding: 16px; }
+  body.mode-rodovia label{ font-size: calc(13px * var(--scale)); }
+  body.mode-rodovia input, body.mode-rodovia select, body.mode-rodovia textarea{ padding: 14px 14px; font-size: calc(15px * var(--scale)); border-radius: 12px; min-height: var(--touch); }
+  body.mode-rodovia .checkbox-group label{ padding: 12px 14px; font-size: calc(14px * var(--scale)); min-height: var(--touch); }
+  body.mode-rodovia .btn{ padding: 14px 18px; font-size: calc(16px * var(--scale)); border-radius: 14px; min-height: var(--touch); }
+  body.mode-rodovia .actions{ display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  body.mode-rodovia .actions .btn{ flex: 1 0 180px; }
+
+  body.mode-contraste{ --bg: #ffffff; --card: #ffffff; --accent: #000000; --text: #000000; --muted: #222; }
+  body.mode-contraste .card{ border-color:#000 !important; }
+  body.mode-contraste .checkbox-group label{ border-color:#000; }
+  body.mode-contraste .btn{ background:#000; color:#fff; }
+
+  body.mode-noturno{ --bg: #0e0f14; --card: #151724; --accent: #8c95ff; --text: #f2f3ff; --muted: #b8b9c9; background: linear-gradient(180deg, #0f1020 0%, #0e0f14 100%) !important; }
+  body.mode-noturno .card{ background: var(--card); border: 1px solid rgba(140,149,255,0.18); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+  body.mode-noturno .checkbox-group label{ background:#1a1d2c; border-color: rgba(140,149,255,0.28); }
+  body.mode-noturno .btn{ background: var(--accent); color:#0e0f14; }
+
+  @media print {
+    body{ background:#fff !important; padding:0 !important; }
+    .card{ background:#fff !important; box-shadow:none !important; border:1px solid #bbb !important; }
+    .actions, .addPhotosBtn, input[type="file"], #toastMessage, .toggle-container { display:none !important; }
+    .card, .section, img { page-break-inside: avoid; }
+    .form-grid{ display:block !important; }
+    label{ color:#000 !important; }
+    input, select, textarea{ border:1px solid #444 !important; background:#fff !important; color:#000 !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="toastMessage" role="status" aria-live="polite"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="title">CHECKLIST DE ACIDENTES</div>
+    </header>
+
+    <div class="card toggle-container" style="margin-bottom:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+      <strong>Modo de Exibição:</strong>
+      <label class="toggle-chip"><input type="checkbox" id="modeRodoviaToggle"> <span>Ultra-compacto</span></label>
+      <label class="toggle-chip"><input type="checkbox" id="modeContrasteToggle"> <span>Alto contraste</span></label>
+      <label class="toggle-chip"><input type="checkbox" id="modeNoturnoToggle"> <span>Noturno</span></label>
+    </div>
+
+    <form id="form" class="card" onsubmit="return false">
+      <div class="form-grid">
+
+        <section class="card col-6">
+          <h2>Informações Gerais</h2>
+          <label>EV N° <span class="muted">*</span></label>
+          <input id="ev" name="ev" type="text" required>
+          <div style="height:8px"></div>
+          <div class="inline-row">
+            <div style="flex:1">
+              <label>DATA <span class="muted">*</span></label>
+              <input id="data" name="data" type="date" required>
+            </div>
+            <div style="width:160px">
+              <label>HORA <span class="muted">*</span></label>
+              <input id="time" name="time" type="time" required>
+            </div>
+          </div>
+        </section>
+
+        <section class="card col-6">
+          <h2>Detalhes</h2>
+          <div style="width:100%; margin-bottom:8px;">
+            <label>TIPO DE ACIDENTE <span class="muted">*</span></label>
+            <select id="tipo" name="tipo" required>
+              <option value="">Selecione</option>
+              <option>AC 01</option>
+              <option>AC 02</option>
+              <option>AC 03</option>
+              <option>AC 04</option>
+              <option>AC 05</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:8px;">
+            <div style="flex:1">
+              <label>RESPONSÁVEL <span class="muted">*</span></label>
+              <input id="responsavel" name="responsavel" type="text" required>
+            </div>
+            <div style="width:160px">
+              <label>PREFIXO VIATURA <span class="muted">*</span></label>
+              <input id="prefixoViatura" name="prefixoViatura" type="text" required>
+            </div>
+          </div>
+        </section>
+
+        <section class="card col-12">
+          <fieldset class="fieldset-contrast" aria-labelledby="legend-localizacao">
+            <legend id="legend-localizacao">LOCALIZAÇÃO</legend>
+            <div class="inline-row" style="margin-bottom:10px;">
+              <div style="flex:1; min-width:220px;">
+                <label for="rodovia">RODOVIA <span class="muted">*</span> (máx 10 caracteres)</label>
+                <input id="rodovia" name="rodovia" type="text" maxlength="10" required>
+              </div>
+              <div style="width:140px; min-width:120px;">
+                <label for="km">KM <span class="muted">*</span></label>
+                <input id="km" name="km" type="text" maxlength="10" required>
+              </div>
+            </div>
+
+            <fieldset class="fieldset-contrast" style="padding:10px; margin-bottom:12px;">
+              <legend style="font-weight:700; color:var(--accent);">SENTIDO <span class="muted">*</span></legend>
+              <div id="sentido" class="checkbox-group" role="group" aria-label="Sentido da via">
+                <label>🧭 <input type="checkbox" name="sentido" value="NORTE"> NORTE</label>
+                <label>🧭 <input type="checkbox" name="sentido" value="SUL"> SUL</label>
+                <label>🧭 <input type="checkbox" name="sentido" value="LESTE"> LESTE</label>
+                <label>🧭 <input type="checkbox" name="sentido" value="OESTE"> OESTE</label>
+              </div>
+            </fieldset>
+
+            <fieldset class="fieldset-contrast" style="padding:10px;">
+              <legend style="font-weight:700; color:var(--accent);">PISTA <span class="muted">*</span></legend>
+              <div id="pista" class="checkbox-group" role="group" aria-label="Pista">
+                <label>=== <input type="checkbox" name="pista" value="PRINCIPAL"> PRINCIPAL</label>
+                <label>=== <input type="checkbox" name="pista" value="MARGINAL"> MARGINAL</label>
+              </div>
+            </fieldset>
+          </fieldset>
+        </section>
+
+        <section class="card col-12">
+          <fieldset class="fieldset-contrast" aria-labelledby="legend-tracado">
+            <legend id="legend-tracado">TRAÇADO DA VIA</legend>
+            <div id="tracado" class="checkbox-group" style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px;">
+              <label>⬜ <input type="checkbox" name="tracado" value="RETA"> RETA</label>
+              <label>↪️ <input type="checkbox" name="tracado" value="CURVA SUAVE"> CURVA SUAVE</label>
+              <label>⤴️ <input type="checkbox" name="tracado" value="CURVA ACENTUADA"> CURVA ACENTUADA</label>
+              <label>⬆️ <input type="checkbox" name="tracado" value="ACLIVE"> ACLIVE</label>
+              <label>⬇️ <input type="checkbox" name="tracado" value="DECLIVE"> DECLIVE</label>
+              <label>➡️ <input type="checkbox" name="tracado" value="NÍVEL"> NÍVEL</label>
+              <label>⛔ <input type="checkbox" name="tracado" value="BARREIRA CENTRAL"> BARREIRA CENTRAL</label>
+              <label>⛔ <input type="checkbox" name="tracado" value="BARREIRA LATERAL"> BARREIRA LATERAL</label>
+              <label>🛡️ <input type="checkbox" name="tracado" value="DEFENSA CENTRAL"> DEFENSA CENTRAL</label>
+              <label>🛡️ <input type="checkbox" name="tracado" value="DEFENSA LATERAL"> DEFENSA LATERAL</label>
+              <label>🌿 <input type="checkbox" name="tracado" value="GRAMADO LATERAL"> GRAMADO LATERAL</label>
+              <label>🌿 <input type="checkbox" name="tracado" value="GRAMADO CENTRAL"> GRAMADO CENTRAL</label>
+              <label>▭ <input type="checkbox" name="tracado" value="MEIO FIO"> MEIO FIO</label>
+              <label>⛰️ <input type="checkbox" name="tracado" value="TALUDE"> TALUDE</label>
+              <label>✏️ <input type="checkbox" name="tracado" value="OUTROS" id="tracado_outros_cb"> OUTROS</label>
+            </div>
+            <input type="text" id="tracado_outros_txt" name="tracado_outros" class="hidden" placeholder="Descreva (máx 60 caracteres)" maxlength="60" style="margin-top:8px; width:100%;">
+          </fieldset>
+        </section>
+
+        <section class="card col-12">
+          <h2>CONDIÇÕES ADVERSAS</h2>
+          <div class="checkbox-group" id="condgroup">
+            <label><input type="checkbox" name="condicoes" value="CHUVA FINA"> CHUVA FINA</label>
+            <label><input type="checkbox" name="condicoes" value="GAROA"> GAROA</label>
+            <label><input type="checkbox" name="condicoes" value="TEMPO BOM"> TEMPO BOM</label>
+            <label><input type="checkbox" name="condicoes" value="PISTA SECA"> PISTA SECA</label>
+            <label><input type="checkbox" name="condicoes" value="PISTA MOLHADA"> PISTA MOLHADA</label>
+          </div>
+          <div style="height:8px"></div>
+          <label>OUTRAS (máx 60 caracteres)</label>
+          <input id="condicoes_outras" name="condicoes_outras" maxlength="60" type="text">
+        </section>
+      </div>
+
+      <section class="card" style="margin-top:14px;">
+        <h2>VEÍCULOS</h2>
+        <div class="form-group">
+          <label for="numVeiculos">QUANTOS VEÍCULOS ESTÃO ENVOLVIDOS? <span class="muted">*</span></label>
+          <input id="numVeiculos" type="number" min="1" value="1" style="width:140px">
+        </div>
+        <div id="veiculosArea"></div>
+      </section>
+
+      <section class="card" style="margin-top:14px;">
+        <h2>DINÂMICA</h2>
+        <div class="form-group">
+          <label for="dinamica">DESCREVA COMO ACONTECEU O ACIDENTE</label>
+          <textarea id="dinamica" name="dinamica" placeholder="Ex.: Veículo 1 seguia na faixa 2, quando..." rows="4"></textarea>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:14px;">
+        <h2>PREFIXO PMR NO LOCAL</h2>
+        <div class="form-group">
+          <input id="prefixoPMR" name="prefixoPMR" type="text" placeholder="Ex.: A-12345">
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:14px;">
+        <h2>OBSERVAÇÕES</h2>
+        <div class="form-group">
+          <textarea id="observacoes" name="observacoes" placeholder="Informações extras relevantes" rows="3"></textarea>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button type="button" class="btn" id="btnPdf">Gerar PDF</button>
+        <button type="button" class="btn btn-ghost" id="btnShare">Compartilhar</button>
+        <input id="photos" type="file" accept="image/*" multiple class="hidden">
+        <button type="button" class="btn btn-ghost" id="btnAddPhotos">Selecionar Fotos</button>
+        <button type="button" class="btn btn-ghost" onclick="limparDados()">🗑️ Limpar Dados</button>
+      </div>
+    </form>
+
+    <div id="status" class="muted" style="margin-top:8px;"></div>
+    <footer>
+      Arquivo gerado localmente — funciona offline.
+    </footer>
+  </div>
+
+<script>
+/* ---------- Helpers Globais ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+function escapeHtml(s){ 
+  if(!s) return ''; 
+  return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); 
+}
+
+function showToast(msg){
+  const t = $('#toastMessage');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+function slug(s){
+  return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\-]+/g, '_').replace(/_+/g, '_').slice(0, 40) || 'ACIDENTE';
+}
+
+/* ---------- Regras de Conflitos das Opções ---------- */
+function setupConflicts() {
+  const sent = $$('#sentido input[type=checkbox]');
+  sent.forEach(cb => cb.addEventListener('change', () => {
+    if (cb.checked) {
+      sent.forEach(other => { if (other !== cb) { other.checked = false; other.disabled = true; } });
+    } else {
+      sent.forEach(other => { other.disabled = false; });
+    }
+  }));
+
+  const pistaEls = $$('#pista input[type=checkbox]');
+  pistaEls.forEach(cb => cb.addEventListener('change', ()=>{
+    if(cb.checked){
+      if(cb.value==='PRINCIPAL') disableByValue(pistaEls,'MARGINAL',true);
+      if(cb.value==='MARGINAL')  disableByValue(pistaEls,'PRINCIPAL',true);
+    } else {
+      disableByValue(pistaEls,'PRINCIPAL',false);
+      disableByValue(pistaEls,'MARGINAL',false);
+    }
+  }));
+}
+
+function disableByValue(list, val, disable){
+  list.forEach(el=>{
+    if(el.value === val){
+      el.disabled = disable;
+      el.parentElement.style.opacity = disable ? 0.5 : 1;
+      if(disable) el.checked = false;
+    }
+  });
+}
+
+function setupTracadoConflicts() {
+  const tracado = $$('#tracado input[type=checkbox]');
+  const outrosCb  = $('#tracado_outros_cb');
+  const outrosTxt = $('#tracado_outros_txt');
+
+  const conflictPairs = [
+    ['RETA','CURVA SUAVE'], ['RETA','CURVA ACENTUADA'], ['CURVA SUAVE','CURVA ACENTUADA'],
+    ['ACLIVE','DECLIVE'], ['ACLIVE','NÍVEL'], ['DECLIVE','NÍVEL'],
+    ['BARREIRA CENTRAL','DEFENSA CENTRAL'], ['BARREIRA LATERAL','DEFENSA LATERAL'],
+    ['GRAMADO LATERAL','GRAMADO CENTRAL'], ['TALUDE','GRAMADO LATERAL'],
+    ['TALUDE','DEFENSA LATERAL'], ['TALUDE','BARREIRA LATERAL'],
+    ['MEIO FIO','GRAMADO LATERAL'], ['MEIO FIO','DEFENSA LATERAL'],
+    ['MEIO FIO','BARREIRA LATERAL'], ['MEIO FIO','TALUDE']
+  ];
+
+  const conflicts = {};
+  conflictPairs.forEach(([a,b])=>{
+    (conflicts[a] ||= []).push(b);
+    (conflicts[b] ||= []).push(a);
+  });
+
+  function refreshTracado(){
+    const checked = tracado.filter(x=>x.checked).map(x=>x.value);
+    tracado.forEach(cb=>{
+      const list = conflicts[cb.value] || [];
+      const disable = checked.some(val => val !== cb.value && list.includes(val));
+      cb.disabled = disable;
+      cb.parentElement.style.opacity = disable ? 0.5 : 1;
+      if(disable) cb.checked = false;
+    });
+
+    if(outrosCb && outrosTxt){
+      const show = outrosCb.checked;
+      outrosTxt.classList.toggle('hidden', !show);
+      outrosTxt.required = show;
+    }
+  }
+
+  tracado.forEach(cb => cb.addEventListener('change', refreshTracado));
+  refreshTracado();
+}
+
+/* ---------- Construtor de Formulários Dinâmicos de Veículos ---------- */
+const veiculosArea = $('#veiculosArea');
+const numVeic = $('#numVeiculos');
+let vehicleCounter = 0;
+
+function buildVehicles(n){
+  if(!veiculosArea) return;
+  veiculosArea.innerHTML = '';
+  vehicleCounter = 0;
+
+  for(let i = 0; i < n; i++){
+    vehicleCounter++;
+    const id = 'V' + vehicleCounter;
+    const wrap = document.createElement('div');
+    wrap.className = 'vehicle';
+    wrap.dataset.id = id;
+    wrap.style.marginTop = "14px";
+    wrap.style.borderTop = "1px dashed #7B68EE";
+    wrap.style.paddingTop = "10px";
+    
+    wrap.innerHTML = `
+      <h3>${id} — DADOS DO VEÍCULO</h3>
+      <label>TIPO:</label> <input name="${id}_tipo" type="text" placeholder="Ex: MOTO, AP, CA..." required>
+      <label>MARCA:</label> <input name="${id}_marca" type="text" required>
+      <label>MODELO:</label> <input name="${id}_modelo" type="text" required>
+      <label>PLACAS:</label> <input name="${id}_placas" type="text" pattern="[A-Za-z0-9\\- ]+" required>
+
+      <label>ORIGEM:</label> <input name="${id}_origem" type="text" required>
+      <label>DESTINO:</label> <input name="${id}_destino" type="text" required>
+
+      <label>FAIXA QUE TRAFEGAVA <span class="muted">*</span></label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_faixa" value="1"> 1</label>
+        <label><input type="checkbox" name="${id}_faixa" value="2"> 2</label>
+        <label><input type="checkbox" name="${id}_faixa" value="3"> 3</label>
+        <label><input type="checkbox" name="${id}_faixa" value="4"> 4</label>
+        <label><input type="checkbox" name="${id}_faixa" value="5"> 5</label>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+        <div style="flex:1">
+          <label>CINTOS</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="${id}_cintos" value="OK"> OK</label>
+            <label><input type="checkbox" name="${id}_cintos" value="OUTRO"> OUTRO</label>
+          </div>
+          <input name="${id}_cintos_out" placeholder="Descreva" maxlength="20" class="hidden" style="margin-top:4px;">
+        </div>
+        <div style="width:160px">
+          <label>PNEUS</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="${id}_pneus" value="OK"> OK</label>
+            <label><input type="checkbox" name="${id}_pneus" value="OUTRO"> OUTRO</label>
+          </div>
+          <input name="${id}_pneus_out" placeholder="Descreva" maxlength="20" class="hidden" style="margin-top:4px;">
+        </div>
+      </div>
+      <label style="margin-top:8px;">N° DE OCUPANTES:</label><input name="${id}_ocup" type="number" min="0" required>
+      <label>TEM SEGURO?</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_seg" value="SIM"> SIM</label>
+        <label><input type="checkbox" name="${id}_seg" value="NAO"> NÃO</label>
+      </div>
+      <input name="${id}_seguradora" placeholder="Nome da Seguradora" class="hidden" style="margin-top:4px;">
+      <label>É VEÍCULO DE EMPRESA OU TERCEIRO?</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_empresa" value="SIM"> SIM</label>
+        <label><input type="checkbox" name="${id}_empresa" value="NAO"> NÃO</label>
+      </div>
+      <div class="empresaDados hidden" style="background:rgba(0,0,0,0.02); padding:8px; border-radius:6px; margin-top:4px;">
+        <label>CPF/CNPJ/RG:</label><input name="${id}_emp_id" type="text">
+        <label>NOME:</label><input name="${id}_emp_nome" type="text">
+        <label>TEL:</label><input name="${id}_emp_tel" type="text">
+        <label>ENDEREÇO:</label><input name="${id}_emp_end" type="text">
+      </div>
+
+      <h4>CONDUTOR DO VEÍCULO</h4>
+      <label>NOME:</label><input name="${id}_cond_nome" type="text" required>
+      <label>CPF:</label><input name="${id}_cond_cpf" type="text" required>
+      <label>RG:</label><input name="${id}_cond_rg" type="text" required>
+      <label>TEL:</label><input name="${id}_cond_tel" type="text" required>
+      <label>END.:</label><input name="${id}_cond_end" type="text" required>
+      <label>HOUVE DANOS AO PATRIMÔNIO?</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_danos" value="SIM"> SIM</label>
+        <label><input type="checkbox" name="${id}_danos" value="NAO"> NÃO</label>
+      </div>
+      <textarea name="${id}_danos_rel" class="hidden" placeholder="Relate os danos" style="margin-top:4px;"></textarea>
+      <label>TEM CARGA DE PRODUTO PERIGOSO (PP)?</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="${id}_pp" value="SIM"> SIM</label>
+        <label><input type="checkbox" name="${id}_pp" value="NAO"> NÃO</label>
+      </div>
+      <div class="prodDados hidden" style="background:rgba(0,0,0,0.02); padding:8px; border-radius:6px; margin-top:4px;">
+        <label>TIPO DE PRODUTO:</label><input name="${id}_pp_tipo" type="text">
+        <label>Nº DA ONU:</label><input name="${id}_pp_onu" type="text">
+        <label>Nº DO RÓTULO DE RISCO:</label><input name="${id}_pp_rot" type="text">
+        <label>RESPONSÁVEL TÉCNICO:</label><input name="${id}_pp_resp" type="text">
+        <label>ORIGEM:</label><input name="${id}_pp_origem" type="text">
+        <label>DESTINO:</label><input name="${id}_pp_destino" type="text">
+        <label>OUTROS:</label><input name="${id}_pp_out" type="text">
+      </div>
+      <div class="photos-block" style="margin-top:10px;">
+        <button type="button" class="btn btn-ghost addPhotosBtn" data-id="${id}">Adicionar Fotos do Veículo</button>
+        <input type="file" id="fileInput_${id}" accept="image/*" multiple style="display:none">
+        <div class="photosPreview" id="photosPreview_${id}"></div>
+      </div>
+    `;
+    veiculosArea.appendChild(wrap);
+
+    const addBtn = wrap.querySelector('.addPhotosBtn');
+    const fileInput = wrap.querySelector(`#fileInput_${id}`);
+    const previewArea = wrap.querySelector(`#photosPreview_${id}`);
+
+    if(addBtn && fileInput && previewArea){
+      addBtn.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', (ev) => {
+        Array.from(ev.target.files).forEach(file => {
+          if (!file.type.startsWith('image/')) return;
+          const reader = new FileReader();
+          reader.onload = function(loadEv) {
+            const thumbWrap = document.createElement('div');
+            thumbWrap.className = 'thumbWrap';
+            thumbWrap.innerHTML = `<img class="photo" src="${loadEv.target.result}"><button type="button" class="removePhotoBtn">Remover</button>`;
+            thumbWrap.querySelector('.removePhotoBtn').addEventListener('click', () => { thumbWrap.remove(); salvarFormulario(); });
+            previewArea.appendChild(thumbWrap);
+            salvarFormulario();
+          };
+          reader.readAsDataURL(file);
+        });
+        fileInput.value = '';
+      });
+    }
+
+    const setToggle = (checkboxName, outName, wrapperSelector) => {
+      const cbs = wrap.querySelectorAll(`input[name="${checkboxName}"]`);
+      cbs.forEach(cb=>cb.addEventListener('change', ()=>{
+        cbs.forEach(o=>{ if(o!==cb) o.checked=false; });
+        const out = wrapperSelector ? wrap.querySelector(wrapperSelector) : wrap.querySelector(`[name="${outName}"]`);
+        if(out){
+          const active = Array.from(cbs).some(x=>x.checked && (x.value==='OUTRO' || x.value==='SIM'));
+          out.classList.toggle('hidden', !active);
+          out.required = active;
+        }
+      }));
+    };
+
+    setToggle(`${id}_cintos`, `${id}_cintos_out`);
+    setToggle(`${id}_pneus`, `${id}_pneus_out`);
+    setToggle(`${id}_seg`, `${id}_seguradora`);
+    setToggle(`${id}_empresa`, null, '.empresaDados');
+    setToggle(`${id}_danos`, `${id}_danos_rel`);
+    setToggle(`${id}_pp`, null, '.prodDados');
+
+    const faixaCbs = wrap.querySelectorAll(`input[name="${id}_faixa"]`);
+    faixaCbs.forEach(cb => cb.addEventListener('change', () => {
+      if (cb.checked) faixaCbs.forEach(o => { if (o !== cb) o.checked = false; });
+    }));
+  }
+}
+
+function validaCamposBasicos(){
+  const form = $('#form');
+  if (form && !form.checkValidity()) {
+    form.reportValidity();
+    return false;
+  }
+  return true;
+}
+
+function validaFaixasObrigatorias(){
+  const vehicles = $$('.vehicle');
+  for(const v of vehicles){
+    const id = v.dataset.id;
+    if(!v.querySelector(`input[name="${id}_faixa"]:checked`)){
+      showToast(`Selecione a FAIXA de tráfego do veículo ${id}.`);
+      return false;
+    }
+  }
+  return true;
+}
+
+/* ---------- Compilador do Relatório de Impressão HTML ---------- */
+async function buildPrintableHTML() {
+  const data = {
+    ev: ($('#ev')?.value || '').trim(),
+    data: $('#data')?.value || '',
+    hora: $('#time')?.value || '',
+    tipo: $('#tipo')?.value || '',
+    responsavel: $('#responsavel')?.value || '',
+    prefixo: $('#prefixoViatura')?.value || '',
+    prefixo_pmr_no_local: ($('#prefixoPMR')?.value || '').trim(),
+    rodovia: ($('#rodovia')?.value || '').trim(),
+    km: ($('#km')?.value || '').trim(),
+    sentido: $$('#sentido input:checked').map(i => i.value).join(' • '),
+    pista:   $$('#pista input:checked').map(i => i.value).join(' • '),
+    tracado: (() => {
+      const checked = $$('#tracado input:checked').map(i => i.value);
+      const outrosEl  = $('#tracado_outros_txt');
+      const outrosVal = outrosEl ? (outrosEl.value || '').trim() : '';
+      let out = checked.join(' • ');
+      if (checked.includes('OUTROS') && outrosVal) out = out.replace('OUTROS', `OUTROS — ${outrosVal}`);
+      return out;
+    })(),
+    condicoes: ($('#condicoes_outras')?.value || '').trim() || $$('#condgroup input:checked').map(i => i.value).join(' • '),
+    dinamica: ($('#dinamica')?.value || '').trim(),
+    observacoes: ($('#observacoes')?.value || '').trim(),
+    vehicles: []
+  };
+
+  const vdivs = $$('#veiculosArea .vehicle');
+  for (const v of vdivs) {
+    const id = v.dataset.id;
+    const get = name => (v.querySelector(`[name="${name}"]`)?.value || '').trim();
+    const pick = name => Array.from(v.querySelectorAll(`[name="${name}"]`)).find(x => x.checked)?.value || '';
+
+    const emp_flag   = pick(`${id}_empresa`);
+    const danos_flag = pick(`${id}_danos`);
+    const pp_flag    = pick(`${id}_pp`);
+
+    const photoElements = Array.from(v.querySelectorAll('.photosPreview img'));
+    const vehiclePhotos = photoElements.map(img => img.src);
+
+    data.vehicles.push({
+      id,
+      tipo: get(`${id}_tipo`),
+      marca: get(`${id}_marca`),
+      modelo: get(`${id}_modelo`),
+      placas: get(`${id}_placas`),
+      origem: get(`${id}_origem`),
+      destino: get(`${id}_destino`),
+      faixa: $$(`input[name="${id}_faixa"]:checked`).map(i => i.value).join(' • '),
+      ocup: get(`${id}_ocup`),
+      cintos: pick(`${id}_cintos`),
+      cintos_out: get(`${id}_cintos_out`),
+      pneus: pick(`${id}_pneus`),
+      pneus_out: get(`${id}_pneus_out`),
+      seg: pick(`${id}_seg`),
+      seguradora: get(`${id}_seguradora`),
+      empresa: emp_flag === 'SIM' ? { id: get(`${id}_emp_id`), nome: get(`${id}_emp_nome`), tel: get(`${id}_emp_tel`), end: get(`${id}_emp_end`) } : null,
+      condutor: { nome: get(`${id}_cond_nome`), cpf: get(`${id}_cond_cpf`), rg: get(`${id}_cond_rg`), tel: get(`${id}_cond_tel`), end: get(`${id}_cond_end`) },
+      danos_flag, danos_rel: get(`${id}_danos_rel`),
+      pp_flag,
+      pp: pp_flag === 'SIM' ? { tipo: get(`${id}_pp_tipo`), onu: get(`${id}_pp_onu`), rot: get(`${id}_pp_rot`), resp: get(`${id}_pp_resp`), origem: get(`${id}_pp_origem`), destino: get(`${id}_pp_destino`), outs: get(`${id}_pp_out`) } : null,
+      photos: vehiclePhotos
+    });
+  }
+
+  let html = `<!doctype html><html><head><meta charset="utf-8"><title>Relatório de Acidente</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;padding:20px;color:#000;background:#fff;}
+      h1{color:#4b2fb0;font-weight:800;text-align:center;margin:0 0 20px; font-size:24px;border-bottom:2px solid #4b2fb0;padding-bottom:10px;}
+      h2{font-weight:700;margin:20px 0 10px;color:#4b2fb0;font-size:18px;border-bottom:1px solid #ccc;padding-bottom:4px;}
+      h3{font-weight:700;margin:14px 0 6px;color:#555;font-size:15px;}
+      p{margin:6px 0; font-size:14px; line-height:1.4;}
+      p strong{min-width:200px; display:inline-block; color:#333;}
+      .section{margin-bottom:18px;padding-bottom:10px;}
+      .grid-2{display:grid; grid-template-columns: 1fr 1fr; gap:10px;}
+      img{max-width:30%; max-height:150px; margin:6px; border:1px solid #ddd; border-radius:4px; object-fit:cover;}
+      @media print { img { page-break-inside: avoid; } }
+    </style></head><body><h1>RELATÓRIO DE ACIDENTE RODOVIÁRIO</h1>`;
+
+  html += `<div class="section grid-2">
+    <div>
+      <p><strong>EV N°:</strong> ${escapeHtml(data.ev)}</p>
+      <p><strong>DATA:</strong> ${escapeHtml(data.data)}</p>
+      <p><strong>HORA:</strong> ${escapeHtml(data.hora)}</p>
+      <p><strong>TIPO DE ACIDENTE:</strong> ${escapeHtml(data.tipo)}</p>
+    </div>
+    <div>
+      <p><strong>RESPONSÁVEL:</strong> ${escapeHtml(data.responsavel)}</p>
+      <p><strong>PREFIXO VIATURA:</strong> ${escapeHtml(data.prefixo)}</p>
+      ${data.prefixo_pmr_no_local ? `<p><strong>PREFIXO PMR NO LOCAL:</strong> ${escapeHtml(data.prefixo_pmr_no_local)}</p>` : ''}
+    </div>
+  </div>
+  <div class="section" style="border-top:1px solid #ccc; padding-top:10px;">
+    <p><strong>RODOVIA:</strong> ${escapeHtml(data.rodovia)} | <strong>KM:</strong> ${escapeHtml(data.km)}</p>
+    <p><strong>SENTIDO:</strong> ${escapeHtml(data.sentido)} | <strong>PISTA:</strong> ${escapeHtml(data.pista)}</p>
+    <p><strong>TRAÇADO DA VIA:</strong> ${escapeHtml(data.tracado)}</p>
+    <p><strong>CONDIÇÕES ADVERSAS:</strong> ${escapeHtml(data.condicoes)}</p>
+  </div>`;
+
+  data.vehicles.forEach(v => {
+    html += `<div class="section"><h2>${escapeHtml(v.id)} — DADOS DO VEÍCULO (${escapeHtml(v.tipo)})</h2>
+      <div class="grid-2">
+        <div>
+          <p><strong>MARCA/MODELO:</strong> ${escapeHtml(v.marca)} / ${escapeHtml(v.modelo)}</p>
+          <p><strong>PLACAS:</strong> ${escapeHtml(v.placas)}</p>
+          <p><strong>ORIGEM:</strong> ${escapeHtml(v.origem)}</p>
+          <p><strong>DESTINO:</strong> ${escapeHtml(v.destino)}</p>
+          <p><strong>FAIXA DE TRÁFEGO:</strong> ${escapeHtml(v.faixa)}</p>
+          <p><strong>Nº DE OCUPANTES:</strong> ${escapeHtml(v.ocup)}</p>
+        </div>
+        <div>
+          <p><strong>CINTOS:</strong> ${escapeHtml(v.cintos)}${v.cintos_out ? ' ('+escapeHtml(v.cintos_out)+')' : ''}</p>
+          <p><strong>PNEUS:</strong> ${escapeHtml(v.pneus)}${v.pneus_out ? ' ('+escapeHtml(v.pneus_out)+')' : ''}</p>
+          <p><strong>SEGURO:</strong> ${escapeHtml(v.seg)}${v.seguradora ? ' — '+escapeHtml(v.seguradora) : ''}</p>
+        </div>
+      </div>`;
+
+    if (v.empresa) {
+      html += `<h3>Proprietário (Empresa/Terceiro)</h3>
+        <p><strong>NOME / DOC:</strong> ${escapeHtml(v.empresa.nome)} — ${escapeHtml(v.empresa.id)}</p>
+        <p><strong>CONTATO / ENDEREÇO:</strong> ${escapeHtml(v.empresa.tel)} | ${escapeHtml(v.empresa.end)}</p>`;
+    }
+
+    html += `<h3>Condutor</h3>
+      <p><strong>NOME:</strong> ${escapeHtml(v.condutor.nome)} | <strong>CPF:</strong> ${escapeHtml(v.condutor.cpf)} | <strong>RG:</strong> ${escapeHtml(v.condutor.rg)}</p>
+      <p><strong>CONTATO / ENDEREÇO:</strong> ${escapeHtml(v.condutor.tel)} | ${escapeHtml(v.condutor.end)}</p>`;
+
+    if (v.danos_flag === 'SIM') html += `<p><strong>DANOS AO PATRIMÔNIO:</strong> ${escapeHtml(v.danos_rel)}</p>`;
+    
+    if (v.pp_flag === 'SIM' && v.pp) {
+      html += `<h3>Produto Perigoso (PP)</h3>
+        <p><strong>PRODUTO / ONU:</strong> ${escapeHtml(v.pp.tipo)} — Nº ONU: ${escapeHtml(v.pp.onu)} | <strong>RISCO:</strong> ${escapeHtml(v.pp.rot)}</p>
+        <p><strong>ROTA:</strong> ${escapeHtml(v.pp.origem)} ➡️ ${escapeHtml(v.pp.destino)} | <strong>RESP. TÉCNICO:</strong> ${escapeHtml(v.pp.resp)}</p>`;
+    }
+
+    if (v.photos && v.photos.length) {
+      html += '<div>';
+      v.photos.forEach(p => html += `<img src="${p}">`);
+      html += '</div>';
+    }
+    html += `</div>`;
+  });
+
+  if (data.dinamica) html += `## DINÂMICA DOS FATOS\n${escapeHtml(data.dinamica)}`;
+  if (data.observacoes) html += `## OBSERVAÇÕES EXTRA\n${escapeHtml(data.observacoes)}`;
+
+  html += '</body></html>';
+  return html;
+}
+
+/* ---------- Handlers de Eventos dos Botões ---------- */
+$('#btnPdf').addEventListener('click', async ()=>{
+  if(!validaCamposBasicos() || !validaFaixasObrigatorias()) return;
+  try{
+    $('#prefixoPMR')?.blur();
+    await new Promise(r => setTimeout(r, 50));
+
+    const printable = await buildPrintableHTML();
+    const blob = new Blob([printable], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const fname  = `ACIDENTE_${slug($('#ev')?.value)}_${new Date().toISOString().slice(0,10)}.html`;
+
+    const w = window.open(url, '_blank');
+    if (w) {
+      w.onload = ()=>{ try{ w.focus(); w.print(); } catch(_){} };
+    } else {
+      const a = document.createElement('a');
+      a.href = url; a.download = fname; a.click();
+      URL.revokeObjectURL(url);
+      alert('Arquivo gerado e baixado localmente.');
+    }
+  } catch(err){
+    alert('Erro ao processar impressão: ' + (err?.message || err));
+  }
+});
+
+$('#btnShare').addEventListener('click', async ()=>{
+  if(!validaCamposBasicos() || !validaFaixasObrigatorias()) return;
+  try{
+    const printable = await buildPrintableHTML();
+    const blob = new Blob([printable], {type:'text/html'});
+    const fname  = `ACIDENTE_${slug($('#ev')?.value)}_${new Date().toISOString().slice(0,10)}.html`;
+    const file = new File([blob], fname, {type:'text/html'});
+
+    if (navigator.canShare && navigator.canShare({files:[file]})) {
+      await navigator.share({ title:'Checklist de Acidente', files:[file] });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = fname; a.click();
+      URL.revokeObjectURL(url);
+      alert('Compartilhamento nativo indisponível. Download concluído.');
+    }
+  } catch(err){
+    alert('Erro ao compartilhar: ' + (err?.message || err));
+  }
+});
+
+$('#btnAddPhotos').addEventListener('click', ()=> $('#photos').click());
+$('#photos').addEventListener('change', (e)=>{
+  const files = Array.from(e.target.files || []);
+  $('#status').textContent = `${files.length} foto(s) global(ais) de cena selecionada(s)`;
+});
+
+/* ---------- Persistência Local Avançada (Auto-Save) ---------- */
+function salvarFormulario() {
+  const form = $('#form');
+  if(!form) return;
+
+  const store = {};
+  
+  // Captura todos os inputs e textareas do formulário
+  const inputs = form.querySelectorAll('input, select, textarea');
+  inputs.forEach(el => {
+    if (!el.name) return;
+    
+    if (el.type === 'checkbox' || el.type === 'radio') {
+      if (el.checked) {
+        if (!store[el.name]) store[el.name] = [];
+        store[el.name].push(el.value);
+      }
+    } else {
+      store[el.name] = el.value;
+    }
+  });
+
+  const num = $('#numVeiculos');
+  if (num) store.__numVeiculos = parseInt(num.value || '1', 10);
+  
+  localStorage.setItem('formAcidente', JSON.stringify(store));
+}
+
+function restaurarFormulario() {
+  const salvo = localStorage.getItem('formAcidente');
+  if (!salvo) { buildVehicles(1); return; }
+
+  const data = JSON.parse(salvo);
+  const form = $('#form');
+
+  const num = $('#numVeiculos');
+  if (num && data.__numVeiculos) {
+    num.value = data.__numVeiculos;
+    buildVehicles(data.__numVeiculos);
+  } else {
+    buildVehicles(1);
+  }
+
+  Object.keys(data).forEach(name => {
+    if (name === '__numVeiculos') return;
+    const value = data[name];
+    const nodes = form.querySelectorAll(`[name="${name}"]`);
+    if (!nodes.length) return;
+
+    const values = Array.isArray(value) ? value : [value];
+    nodes.forEach((node) => {
+      if (node.type === 'checkbox' || node.type === 'radio') {
+        node.checked = values.includes(node.value);
+      } else {
+        node.value = value;
+      }
+    });
+  });
+
+  // Força atualização visual dos toggles e dos campos dependentes após restauração
+  const outrosCb = $('#tracado_outros_cb');
+  const outrosTxt = $('#tracado_outros_txt');
+  if (outrosCb && outrosTxt) {
+    const show = outrosCb.checked;
+    outrosTxt.classList.toggle('hidden', !show);
+    outrosTxt.required = show;
+  }
+}
+
+function limparDados() {
+  if (confirm('Limpar de forma definitiva todo o rascunho salvo?')) {
+    localStorage.removeItem('formAcidente');
+    $('#form').reset();
+    buildVehicles(1);
+    showToast("Formulário limpo!");
+  }
+}
+
+/* ---------- Inicialização de Interface de Usuário ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+  setupConflicts();
+  setupTracadoConflicts();
+  restaurarFormulario();
+
+  const form = $('#form');
+  if (form) {
+    // Captura digitação e mudanças em tempo real
+    form.addEventListener('input', salvarFormulario);
+    form.addEventListener('change', salvarFormulario);
+  }
+
+  // Garante que salve quando o usuário trocar de tela/aba ou fechar o app
+  window.addEventListener('blur', salvarFormulario);
+  window.addEventListener('pagehide', salvarFormulario);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      salvarFormulario();
+    }
+  });
+
+  numVeic.addEventListener('change', ()=>{
+    let n = parseInt(numVeic.value)||1;
+    if(n<1) n=1;
+    if(n>40 && !confirm('Criar formulário estendido para muitos veículos?')){ numVeic.value=40; n=40; }
+    buildVehicles(n);
+    salvarFormulario();
+  });
+
+  (function(){
+    function applySavedModes(){
+      const modes = JSON.parse(localStorage.getItem('rodovia_modes') || '{}');
+      document.body.classList.toggle('mode-rodovia',   !!modes.rodovia);
+      document.body.classList.toggle('mode-contraste', !!modes.contraste);
+      document.body.classList.toggle('mode-noturno',   !!modes.noturno);
+
+      if($('#modeRodoviaToggle')) $('#modeRodoviaToggle').checked = !!modes.rodovia;
+      if($('#modeContrasteToggle')) $('#modeContrasteToggle').checked = !!modes.contraste;
+      if($('#modeNoturnoToggle')) $('#modeNoturnoToggle').checked = !!modes.noturno;
+    }
+
+    function saveModes(){
+      const modes = {
+        rodovia:   document.body.classList.contains('mode-rodovia'),
+        contraste: document.body.classList.contains('mode-contraste'),
+        noturno:   document.body.classList.contains('mode-noturno'),
+      };
+      localStorage.setItem('rodovia_modes', JSON.stringify(modes));
+    }
+
+    if($('#modeRodoviaToggle')) $('#modeRodoviaToggle').addEventListener('change', (e)=>{ document.body.classList.toggle('mode-rodovia', e.target.checked); saveModes(); });
+    if($('#modeContrasteToggle')) $('#modeContrasteToggle').addEventListener('change', (e)=>{ document.body.classList.toggle('mode-contraste', e.target.checked); saveModes(); });
+    if($('#modeNoturnoToggle')) $('#modeNoturnoToggle').addEventListener('change', (e)=>{ document.body.classList.toggle('mode-noturno', e.target.checked); saveModes(); });
+
+    applySavedModes();
+  })();
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+      .then(() => console.log("Service Worker ativo."))
+      .catch(err => console.log("Falha no Service Worker: ", err));
+  }
+});
+</script>
+</body>
+</html>
