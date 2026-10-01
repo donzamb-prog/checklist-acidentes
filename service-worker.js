@@ -1,6 +1,6 @@
 /*
 =========================================================
-Checklist de Acidentes
+Checklist de Acidentes V2
 Copyright (c) 2026 Donizete Zambeli
 
 Licenciado conforme os termos do arquivo LICENSE.
