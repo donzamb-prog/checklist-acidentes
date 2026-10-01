@@ -1,6 +1,6 @@
 /*
 =========================================================
-Checklist de Acidentes V2
+Checklist de Acidentes 
 Copyright (c) 2026 Donizete Zambeli
 
 Licenciado conforme os termos do arquivo LICENSE.
@@ -12,7 +12,7 @@ Desenvolvido por Donizete Zambeli
 Projeto Checklist de Acidentes
 =========================================================*/
 
-const CACHE_NAME = 'pioneiro-pv-v2'; // Mudamos de v1 para v2 para forçar a atualização nos aparelhos!
+const CACHE_NAME = 'pioneiro-pv-v3'; // Mudamos de v1 para v2 para forçar a atualização nos aparelhos!
 
 const ASSETS = [
     './',
