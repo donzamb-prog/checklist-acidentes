@@ -12,16 +12,14 @@ Desenvolvido por Donizete Zambeli
 Projeto Checklist de Acidentes
 =========================================================*/
 
-const CACHE_NAME = 'pioneiro-pv-v3'; // Mudamos de v1 para v2 para forçar a atualização nos aparelhos!
+const CACHE_NAME = 'checklist-acidentes-v4'; // Atualizado para forçar atualização no navegador/aparelho!
 
 const ASSETS = [
     './',
     './index.html',
+    './manifest.json',
     './icons/icon-192.png',
-    './icons/icon-512.png',
-    './TIMBRADO.png',
-    'https://cdn.tailwindcss.com',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'
+    './icons/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -37,7 +35,6 @@ self.addEventListener('activate', event => {
         caches.keys().then(keys => {
             return Promise.all(
                 keys.map(key => {
-                    // Se encontrar o cache antigo (v1), deleta ele para liberar espaço
                     if (key !== CACHE_NAME) {
                         return caches.delete(key);
                     }
