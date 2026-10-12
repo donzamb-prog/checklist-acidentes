@@ -102,16 +102,16 @@ Primeira versão pública contendo:
 
 ---
 
-# 🚀 Próximas melhorias
+# 🚀 Atualização:
 
-- Histórico de ocorrências
-- Estatísticas
-- Banco de dados
-- Sincronização em nuvem
-- Exportação de informações
-- APK Android
-- Melhorias na interface
+## Versão 4.0
 
+- ⚡ Compressão automática de fotos de veículos para otimização de memória.
+- 🛠️ Correção na formatação HTML/PDF das seções de Dinâmica e Observações.
+- 🔄 Atualização do Service Worker (`checklist-acidentes-v4`) com limpeza de arquivos desnecessários no cache offline.
+- 🔤 Conversão automática do campo de placas para maiúsculas.
+- 📱 Ajuste de foco e acessibilidade visual para telas sensíveis ao toque.
+- 💾 Melhoria na restauração visual de campos dependentes salvos no LocalStorage.
 ---
 
 # 👨‍💻 Autor
