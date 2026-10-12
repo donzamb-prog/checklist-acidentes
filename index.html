@@ -41,7 +41,7 @@
   textarea{ min-height:80px; resize:vertical; }
   .inline-row{ display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
   .checkbox-group{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
-  .checkbox-group label{ font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E9E7FF; border-radius:8px; padding:7px 10px; transition: box-shadow .15s ease, transform .05s ease, border-color .15s ease; }
+  .checkbox-group label{ font-weight:500; cursor:pointer; display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #E9E7FF; border-radius:8px; padding:7px 10px; transition: box-shadow .15s ease, transform .05s ease, border-color .15s ease, opacity .15s ease; }
   .checkbox-group label:hover { box-shadow: 0 4px 10px rgba(20,20,50,0.06); }
   .checkbox-group input[type="checkbox"]{ accent-color: var(--accent); }
   .checkbox-group label:has(input[type="checkbox"]:checked){ border-color: rgba(123,104,238,0.55); box-shadow: 0 6px 14px rgba(123,104,238,0.10); }
@@ -318,7 +318,6 @@ function slug(s){
   return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\-]+/g, '_').replace(/_+/g, '_').slice(0, 40) || 'ACIDENTE';
 }
 
-// Redimensiona e comprima foto para economizar memória e evitar travamento
 function compressImage(file, maxWidth = 1200, quality = 0.7) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -347,40 +346,57 @@ function compressImage(file, maxWidth = 1200, quality = 0.7) {
   });
 }
 
-/* ---------- Regras de Conflitos das Opções ---------- */
-function setupConflicts() {
+/* ---------- Regras de Conflitos das Opções (Sincronização Dinâmica) ---------- */
+function updateSentidoConflicts() {
   const sent = $$('#sentido input[type=checkbox]');
-  sent.forEach(cb => cb.addEventListener('change', () => {
-    if (cb.checked) {
-      sent.forEach(other => { if (other !== cb) { other.checked = false; other.disabled = true; } });
+  const checked = sent.filter(cb => cb.checked);
+  sent.forEach(cb => {
+    if (checked.length > 0 && !cb.checked) {
+      cb.disabled = true;
+      cb.parentElement.style.opacity = '0.5';
     } else {
-      sent.forEach(other => { other.disabled = false; });
-    }
-  }));
-
-  const pistaEls = $$('#pista input[type=checkbox]');
-  pistaEls.forEach(cb => cb.addEventListener('change', ()=>{
-    if(cb.checked){
-      if(cb.value==='PRINCIPAL') disableByValue(pistaEls,'MARGINAL',true);
-      if(cb.value==='MARGINAL')  disableByValue(pistaEls,'PRINCIPAL',true);
-    } else {
-      disableByValue(pistaEls,'PRINCIPAL',false);
-      disableByValue(pistaEls,'MARGINAL',false);
-    }
-  }));
-}
-
-function disableByValue(list, val, disable){
-  list.forEach(el=>{
-    if(el.value === val){
-      el.disabled = disable;
-      el.parentElement.style.opacity = disable ? 0.5 : 1;
-      if(disable) el.checked = false;
+      cb.disabled = false;
+      cb.parentElement.style.opacity = '1';
     }
   });
 }
 
-function setupTracadoConflicts() {
+function updatePistaConflicts() {
+  const pistaEls = $$('#pista input[type=checkbox]');
+  const checked = pistaEls.filter(cb => cb.checked);
+  pistaEls.forEach(cb => {
+    if (checked.length > 0 && !cb.checked) {
+      cb.disabled = true;
+      cb.parentElement.style.opacity = '0.5';
+    } else {
+      cb.disabled = false;
+      cb.parentElement.style.opacity = '1';
+    }
+  });
+}
+
+function setupConflicts() {
+  const sent = $$('#sentido input[type=checkbox]');
+  sent.forEach(cb => cb.addEventListener('change', () => {
+    if (cb.checked) {
+      sent.forEach(other => { if (other !== cb) other.checked = false; });
+    }
+    updateSentidoConflicts();
+  }));
+
+  const pistaEls = $$('#pista input[type=checkbox]');
+  pistaEls.forEach(cb => cb.addEventListener('change', () => {
+    if (cb.checked) {
+      pistaEls.forEach(other => { if (other !== cb) other.checked = false; });
+    }
+    updatePistaConflicts();
+  }));
+
+  updateSentidoConflicts();
+  updatePistaConflicts();
+}
+
+function updateTracadoConflicts() {
   const tracado = $$('#tracado input[type=checkbox]');
   const outrosCb  = $('#tracado_outros_cb');
   const outrosTxt = $('#tracado_outros_txt');
@@ -401,40 +417,44 @@ function setupTracadoConflicts() {
     (conflicts[b] ||= []).push(a);
   });
 
-  function refreshTracado(){
-    const checked = tracado.filter(x=>x.checked).map(x=>x.value);
-    tracado.forEach(cb=>{
-      const list = conflicts[cb.value] || [];
-      const disable = checked.some(val => val !== cb.value && list.includes(val));
-      cb.disabled = disable;
-      cb.parentElement.style.opacity = disable ? 0.5 : 1;
-      if(disable) cb.checked = false;
-    });
+  const checked = tracado.filter(x => x.checked).map(x => x.value);
+  tracado.forEach(cb => {
+    const list = conflicts[cb.value] || [];
+    const disable = checked.some(val => val !== cb.value && list.includes(val));
+    cb.disabled = disable;
+    cb.parentElement.style.opacity = disable ? '0.5' : '1';
+  });
 
-    if(outrosCb && outrosTxt){
-      const show = outrosCb.checked;
-      outrosTxt.classList.toggle('hidden', !show);
-      outrosTxt.required = show;
-    }
+  if(outrosCb && outrosTxt){
+    const show = outrosCb.checked;
+    outrosTxt.classList.toggle('hidden', !show);
+    outrosTxt.required = show;
   }
+}
 
-  tracado.forEach(cb => cb.addEventListener('change', refreshTracado));
-  refreshTracado();
+function setupTracadoConflicts() {
+  const tracado = $$('#tracado input[type=checkbox]');
+  tracado.forEach(cb => cb.addEventListener('change', updateTracadoConflicts));
+  updateTracadoConflicts();
 }
 
 /* ---------- Construtor de Formulários Dinâmicos de Veículos ---------- */
 const veiculosArea = $('#veiculosArea');
 const numVeic = $('#numVeiculos');
-let vehicleCounter = 0;
+let currentVehicleCount = 0;
 
 function buildVehicles(n){
   if(!veiculosArea) return;
-  veiculosArea.innerHTML = '';
-  vehicleCounter = 0;
+  n = parseInt(n, 10) || 1;
+  if(n < 1) n = 1;
+  
+  if(currentVehicleCount === n && veiculosArea.children.length === n) return;
 
-  for(let i = 0; i < n; i++){
-    vehicleCounter++;
-    const id = 'V' + vehicleCounter;
+  veiculosArea.innerHTML = '';
+  currentVehicleCount = n;
+
+  for(let i = 1; i <= n; i++){
+    const id = 'V' + i;
     const wrap = document.createElement('div');
     wrap.className = 'vehicle';
     wrap.dataset.id = id;
@@ -851,12 +871,9 @@ function restaurarFormulario() {
   const form = $('#form');
 
   const num = $('#numVeiculos');
-  if (num && data.__numVeiculos) {
-    num.value = data.__numVeiculos;
-    buildVehicles(data.__numVeiculos);
-  } else {
-    buildVehicles(1);
-  }
+  const targetVeicCount = (data.__numVeiculos && parseInt(data.__numVeiculos, 10) > 0) ? parseInt(data.__numVeiculos, 10) : 1;
+  if (num) num.value = targetVeicCount;
+  buildVehicles(targetVeicCount);
 
   Object.keys(data).forEach(name => {
     if (name === '__numVeiculos') return;
@@ -874,15 +891,10 @@ function restaurarFormulario() {
     });
   });
 
+  updateSentidoConflicts();
+  updatePistaConflicts();
+  updateTracadoConflicts();
   refreshVehicleToggles();
-
-  const outrosCb = $('#tracado_outros_cb');
-  const outrosTxt = $('#tracado_outros_txt');
-  if (outrosCb && outrosTxt) {
-    const show = outrosCb.checked;
-    outrosTxt.classList.toggle('hidden', !show);
-    outrosTxt.required = show;
-  }
 }
 
 function limparDados() {
@@ -890,6 +902,9 @@ function limparDados() {
     localStorage.removeItem('formAcidente');
     $('#form').reset();
     buildVehicles(1);
+    updateSentidoConflicts();
+    updatePistaConflicts();
+    updateTracadoConflicts();
     showToast("Formulário limpo!");
   }
 }
@@ -914,13 +929,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  numVeic.addEventListener('change', ()=>{
-    let n = parseInt(numVeic.value)||1;
-    if(n<1) n=1;
-    if(n>40 && !confirm('Criar formulário estendido para muitos veículos?')){ numVeic.value=40; n=40; }
+  function handleNumVeiculosChange() {
+    let n = parseInt(numVeic.value, 10) || 1;
+    if(n < 1) n = 1;
+    if(n > 40 && !confirm('Criar formulário estendido para muitos veículos?')){ 
+      numVeic.value = 40; 
+      n = 40; 
+    }
     buildVehicles(n);
     salvarFormulario();
-  });
+  }
+
+  numVeic.addEventListener('input', handleNumVeiculosChange);
+  numVeic.addEventListener('change', handleNumVeiculosChange);
 
   (function(){
     function applySavedModes(){
