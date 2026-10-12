@@ -12,7 +12,7 @@ Desenvolvido por Donizete Zambeli
 Projeto Checklist de Acidentes
 =========================================================*/
 
-const CACHE_NAME = 'checklist-acidentes-v8';
+const CACHE_NAME = 'checklist-acidentes-v3';
 
 const ASSETS = [
     './',
